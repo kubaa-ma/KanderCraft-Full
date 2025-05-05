@@ -13,7 +13,7 @@
 #define CHUNK_SIZE CHUNK_Z*CHUNK_X*CHUNK_Y
 
 typedef struct{
-    block*** data_blocks;
+    Block*** data_blocks;
 }Chunk;
 
 typedef struct{
