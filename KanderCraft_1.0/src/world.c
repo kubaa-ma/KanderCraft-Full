@@ -5,11 +5,11 @@
 
 Chunk* create_chunk() {
     Chunk* chunk = malloc(sizeof(Chunk));
-    chunk->data_blocks = malloc(CHUNK_Y * sizeof(block**));
+    chunk->data_blocks = malloc(CHUNK_Y * sizeof(Block**));
     for (int y = 0; y < CHUNK_Y; y++) {
-        chunk->data_blocks[y] = malloc(CHUNK_X * sizeof(block*));
+        chunk->data_blocks[y] = malloc(CHUNK_X * sizeof(Block*));
         for (int x = 0; x < CHUNK_X; x++) {
-            chunk->data_blocks[y][x] = malloc(CHUNK_Z * sizeof(block));
+            chunk->data_blocks[y][x] = malloc(CHUNK_Z * sizeof(Block));
         }
     }
     return chunk;
