@@ -49,9 +49,14 @@ int load_config(Player_config *data){
         return 1;
     }
 
-    fgets(value, sizeof(value), config);
+    fscanf(config, "RENDER DISTANCE: %d\n", &data->render_distance);
+    fscanf(config, "PLAYER X POS: %f\n", &data->pos_x);
+    fscanf(config, "PLAYER Z POS: %f\n", &data->pos_z);
+    fscanf(config, "PLAYER Y POS: %f\n", &data->pos_y);
+
 
     fclose(config);
 
     return 0;
 }
+

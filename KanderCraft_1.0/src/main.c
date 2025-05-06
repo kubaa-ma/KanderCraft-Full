@@ -23,7 +23,7 @@ int main() {
 
 
     Camera camera = { 0 };
-    camera.position = (Vector3){ 5.0f, 14.75f, 5.0f };
+    init_player(&data, &camera);
     camera.target = (Vector3){ 0.0f, 0.0f, 0.0f }; 
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; 
     camera.fovy = 54.0f;
@@ -46,7 +46,7 @@ int main() {
 
         EndDrawing();
     }
-
+    take_player_info(&data, &camera);
     save_config(&data);
     unload_textures(&textures);
     CloseWindow();
