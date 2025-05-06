@@ -17,11 +17,11 @@ typedef struct{
 }Chunk;
 
 typedef struct{
-    Chunk* data_chunks[WORLD_SIZE][WORLD_SIZE];
+    Chunk** data_chunks;
 }World;
 
-Chunk* Create_chunk();
+Chunk* create_chunk();
 
-void Create_world(World* world);
+void create_world(World* world);
 void destroy_world(World* world);
 #endif

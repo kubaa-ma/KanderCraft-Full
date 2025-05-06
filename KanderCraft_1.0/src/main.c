@@ -8,7 +8,6 @@
 int main() {
 
     World* user_world = malloc(sizeof(World));
-    Create_world(user_world);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
 
@@ -42,7 +41,6 @@ int main() {
     }
 
     unload_textures(&textures);
-    destroy_world(user_world);
     CloseWindow();
 
     return 0;
