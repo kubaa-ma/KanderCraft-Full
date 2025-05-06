@@ -39,8 +39,8 @@ int main() {
 
         BeginMode3D(camera);
 
-        ClearBackground(WHITE);
-
+        ClearBackground(BLUE);
+        DrawGrid(100, 10);
         EndMode3D();
 
 

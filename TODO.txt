@@ -1,2 +1,2 @@
 - [ ] Allocate memory for 3D array
-- [ ] Camera .txt file with configuration //player
+- [ 1 ] Camera .txt file with configuration //player

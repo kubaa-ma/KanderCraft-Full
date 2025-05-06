@@ -1,7 +1,6 @@
 #include "raylib.h"
 #include "../include/world.h"
 #include "../include/render_world.h"
-#define MATERIAL_DIFFUSE 0
 
 
 
