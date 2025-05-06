@@ -21,6 +21,7 @@ typedef struct{
 }World;
 
 Chunk* Create_chunk();
+
 void Create_world(World* world);
 void destroy_world(World* world);
 #endif

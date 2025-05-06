@@ -12,7 +12,12 @@
 #define FACE_BACK (1 << 4)
 #define FACE_FRONT (1 << 5)
 
+#define SOLID (1 << 0)
+#define OPAQUE (1 << 1)
+#define VISIBLE (1 << 2)
+
 typedef uint8_t VisibleFaces;
+typedef uint8_t B_features;
 
 typedef enum {
     BLOCK_AIR,
@@ -27,10 +32,8 @@ typedef struct {
 
     Blocktype type;
     BoundingBox cube;
-    bool solid;
-    bool opaque;
-    bool visible;
-    VisibleFaces data;
+    VisibleFaces visible_faces;
+    B_features features;
 }Block;
 
 
