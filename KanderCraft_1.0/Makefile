@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Iinclude -std=c99
 LDFLAGS = -Llib -lraylib -lopengl32 -lgdi32 -lwinmm
 
-SRCS = src/main.c src/world.c src/block.c src/render_world.c
+SRCS = src/main.c src/world.c src/block.c src/render_world.c src/config.c src/player_configuration.c
 OBJS = $(SRCS:src/%.c=build/%.o)
 
 OUT = main.exe

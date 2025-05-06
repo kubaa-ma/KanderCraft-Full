@@ -5,12 +5,11 @@
 #include "stdbool.h"
 #include "block.h"
 
-#define WORLD_SIZE 100
+#define TOTAL_CHUNKS 100
 
-#define CHUNK_X 16
-#define CHUNK_Z 16
-#define CHUNK_Y 100
-#define CHUNK_SIZE CHUNK_Z*CHUNK_X*CHUNK_Y
+#define CHUNK_WIDTH 16
+#define CHUNK_LENGTH  16
+#define CHUNK_DEPTH 100
 
 typedef struct{
     Block*** data_blocks;
@@ -20,8 +19,8 @@ typedef struct{
     Chunk** data_chunks;
 }World;
 
-Chunk* create_chunk();
+Chunk* allocate_chunk();
 
-void create_world(World* world);
+void allocate_world(World* world);
 void destroy_world(World* world);
 #endif

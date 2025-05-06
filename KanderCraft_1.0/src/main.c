@@ -2,10 +2,17 @@
 #include "../include/world.h"
 #include "../include/render_world.h"
 #include <stdlib.h>
-
+#include "../include/player_configuration.h"
+#include "../include/config.h"
 
 
 int main() {
+
+    Player_config data;
+
+    if(load_config(&data)){
+        create_config(&data);
+    }
 
     World* user_world = malloc(sizeof(World));
 
@@ -40,6 +47,7 @@ int main() {
         EndDrawing();
     }
 
+    save_config(&data);
     unload_textures(&textures);
     CloseWindow();
 
