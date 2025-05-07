@@ -4,23 +4,28 @@
 #include "raylib.h"
 #include "stdbool.h"
 #include "block.h"
+#include "player_configuration.h"
 
-#define TOTAL_CHUNKS 100
+#define TOTAL_CHUNKS 10
 
 #define CHUNK_WIDTH 16
 #define CHUNK_LENGTH  16
 #define CHUNK_DEPTH 100
 
 typedef struct{
-    Block*** data_blocks;
+    Block ***data_blocks;
 }Chunk;
 
 typedef struct{
     Chunk** data_chunks;
 }World;
 
-Chunk* allocate_chunk();
+Chunk** allocate_chunk(const Player_config *data);
+Block ***allocate_blocks();
 
-void allocate_world(World* world);
-void destroy_world(World* world);
+void free_blocks(Block ***blocks);
+void destroy_world(World *data_world, const Player_config *data);
+void world_generator(World *data_world, Player_config *data);
+void settle_blocks(World *data_world, Player_config *data);
+
 #endif

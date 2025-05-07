@@ -61,6 +61,7 @@
     "stdlib.h": "c",
     "render_world.h": "c",
     "player_configuration.h": "c",
-    "world.h": "c"
+    "world.h": "c",
+    "block.h": "c"
   }
 }

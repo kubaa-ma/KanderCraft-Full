@@ -11,6 +11,8 @@ typedef struct{
     int render_distance;
 }Player_config;
 
+void create_camera(Camera *camera, Vector2 *screenCenter, Vector3 *cameralast);
+
 void take_player_info(Player_config *data, Camera *camera);
 
 void init_player(Player_config *data, Camera *camera);

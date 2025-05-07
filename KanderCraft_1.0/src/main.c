@@ -5,49 +5,64 @@
 #include "../include/player_configuration.h"
 #include "../include/config.h"
 
-
 int main() {
 
-    Player_config data;
 
-    if(load_config(&data)){
-        create_config(&data);
+    Player_config data_player;
+
+    if (load_config(&data_player)) {
+        create_config(&data_player);
     }
 
-    World* user_world = malloc(sizeof(World));
+    World data_world;
+    data_world.data_chunks = allocate_chunk(&data_player);
+
+    for (int i = 0; i < TOTAL_CHUNKS; i++) {
+        for (int j = 0; j < TOTAL_CHUNKS; j++) {
+            data_world.data_chunks[i][j].data_blocks = allocate_blocks();
+        }
+    }
+
+    world_generator(&data_world, &data_player);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
 
     Textures_K textures;
     init_textures(&textures);
 
+    Model block_model;
+    init_model(&block_model, &textures);
 
     Camera camera = { 0 };
-    init_player(&data, &camera);
-    camera.target = (Vector3){ 0.0f, 0.0f, 0.0f }; 
-    camera.up = (Vector3){ 0.0f, 1.0f, 0.0f }; 
-    camera.fovy = 54.0f;
-    camera.projection = CAMERA_PERSPECTIVE;
-    Vector2 screenCenter = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
-    Vector3 cameralast = camera.position;
-
+    Vector2 screenCenter;
+    Vector3 cameralast;
+    init_player(&data_player, &camera);
+    create_camera(&camera, &screenCenter, &cameralast);
 
     while (!WindowShouldClose()) {
+        
+        settle_blocks(&data_world, &data_player);
         UpdateCamera(&camera, CAMERA_FREE);
-
-
-
-        BeginMode3D(camera);
-
+        BeginDrawing();
         ClearBackground(BLUE);
-        DrawGrid(100, 10);
+        BeginMode3D(camera);
+        draw_blocks(&data_world, &data_player, &block_model);
+        DrawGrid(1000, 10);
         EndMode3D();
-
-
         EndDrawing();
     }
-    take_player_info(&data, &camera);
-    save_config(&data);
+
+    take_player_info(&data_player, &camera);
+    save_config(&data_player);
+
+    for (int i = 0; i < data_player.render_distance; i++) {
+        for (int j = 0; j < data_player.render_distance; j++) {
+            free_blocks(data_world.data_chunks[i][j].data_blocks);
+        }
+    }
+
+    UnloadModel(block_model);
+    destroy_world(&data_world, &data_player);
     unload_textures(&textures);
     CloseWindow();
 
