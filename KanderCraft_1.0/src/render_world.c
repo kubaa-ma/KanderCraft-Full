@@ -60,7 +60,7 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                             if (block.visible_faces & FACE_FRONT) {
                                 DrawModelEx(*block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE);
                             }
-                            DrawBoundingBox(block.box, WHITE);
+                            //DrawBoundingBox(block.box, WHITE);
                         }
                     }
                 }
@@ -70,3 +70,56 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 }
 
 
+Vector3 NormalizeVector(Vector3 v) {
+    float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
+    if (length != 0.0f) {
+        v.x /= length;
+        v.y /= length;
+        v.z /= length;
+    }
+    return v;
+}
+
+bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int y, int x, int z) {
+    Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
+    return GetRayCollisionBox(ray, block.box).hit;
+}
+Vector5 detectCollision(Camera camera, World *data_world){
+    Vector5 datas;
+    Vector3 cameradirection = {camera.target.x - camera.position.x, camera.target.y - camera.position.y, camera.target.z - camera.position.z};
+    cameradirection = NormalizeVector(cameradirection);
+    
+    Ray ray = { camera.position, cameradirection };
+    DrawRay(ray, BLUE);
+    for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
+        for (int cz = 0; cz < TOTAL_CHUNKS; cz++) {
+            for (int y = 0; y < CHUNK_DEPTH; y++) {
+                for (int x = 0; x < CHUNK_WIDTH; x++) {
+                    for (int z = 0; z < CHUNK_LENGTH; z++) {
+
+                        if (CheckRayCollisionWithBlock(ray, data_world, cx, cz, y, x, z)) {
+                            datas.cx = cx;
+                            datas.cz = cz;
+                            datas.x = x;
+                            datas.y = y;
+                            datas.z = z;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    DrawBoundingBox(data_world->data_chunks[datas.cx][datas.cz].data_blocks[datas.y][datas.x][datas.z].box, WHITE);
+    return datas;
+
+}
+
+void Game_input(Vector5 data, World *data_world){
+
+    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type != BLOCK_AIR){
+        data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type = BLOCK_AIR;
+    } 
+    if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type != BLOCK_AIR){
+        data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type = BLOCK_DIRT;
+    }
+}

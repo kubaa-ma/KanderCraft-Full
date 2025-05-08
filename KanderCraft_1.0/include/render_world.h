@@ -15,6 +15,14 @@ typedef struct {
 } Textures_K;
 
 
+typedef struct{
+    int cx; 
+    int cz; 
+    int y;
+    int x;
+    int z;
+}Vector5;
+
 void init_textures(Textures_K *data);
 
 void unload_textures(Textures_K *data);
@@ -22,4 +30,12 @@ void unload_textures(Textures_K *data);
 void init_model(Model *block_model, Textures_K *texture_data);
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour);
+
+Vector3 NormalizeVector(Vector3 v);
+
+bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int y, int x, int z);
+
+Vector5 detectCollision(Camera camera, World *data_world);
+
+void Game_input(Vector5 data, World *data_world);
 #endif

@@ -5,6 +5,7 @@
 #include "stdbool.h"
 #include <stdint.h>
 #include "world_config.h"
+#include <math.h>
 
 
 #define BLOCK_SIZE (Vector3){BLOCK_SITE_SIZE, BLOCK_SITE_SIZE, BLOCK_SITE_SIZE}
@@ -46,5 +47,8 @@ typedef struct {
     float sour_y[TOTAL_CHUNKS * CHUNK_DEPTH];
     float sour_z[TOTAL_CHUNKS * CHUNK_LENGTH];
 }Block_orient;
+
+
+
 
 #endif

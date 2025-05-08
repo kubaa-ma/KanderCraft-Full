@@ -4,11 +4,12 @@
 #include <stdlib.h>
 #include "../include/player_configuration.h"
 #include "../include/config.h"
+#include "../include/block.h"
 
 int main() {
 
     Block_orient sour;
-
+    Vector5 Collision_data;
     for (int z = 0; z < TOTAL_CHUNKS * CHUNK_LENGTH - 1; z++) {
         for (int y = 0; y < TOTAL_CHUNKS * CHUNK_DEPTH - 1; y++) {
             for (int x = 0; x < TOTAL_CHUNKS * CHUNK_WIDTH - 1; x++) {
@@ -52,21 +53,23 @@ int main() {
 
     while (!WindowShouldClose()) {
         
-        settle_blocks(&data_world);
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
         ClearBackground(BLUE);
         BeginMode3D(camera);
 
-
         draw_blocks(&data_world, &data_player, &block_model, &sour);
 
+        Collision_data = detectCollision(camera, &data_world);
         DrawGrid(1000, 10);
         DrawRay((Ray){.position = {0,0,0}, .direction = {0,1,0}}, RED);
         EndMode3D();
-        DrawTexture(textures.dirt,10,10,WHITE);
         EndDrawing();
+        settle_blocks(&data_world);
+
     }
+
+    Game_input(Collision_data, &data_world);
 
     take_player_info(&data_player, &camera);
     save_config(&data_player);
