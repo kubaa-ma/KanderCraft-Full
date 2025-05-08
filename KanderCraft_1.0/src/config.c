@@ -60,3 +60,25 @@ int load_config(Player_config *data){
     return 0;
 }
 
+void Centering_cursor(){
+    int reserve = 800;
+    Vector2 mousePos = GetMousePosition();
+    Vector2 screenCenter = { GetScreenWidth() / 2.0f, GetScreenHeight() / 2.0f };
+    if (mousePos.x < screenCenter.x - reserve) {
+        SetMousePosition(screenCenter.x - reserve, mousePos.y);
+    } else if (mousePos.x > screenCenter.x + reserve) {
+        SetMousePosition(screenCenter.x + reserve, mousePos.y);
+    }
+
+    if (mousePos.y < screenCenter.y - reserve) {
+        SetMousePosition(mousePos.x, screenCenter.y - reserve);
+    } else if (mousePos.y > screenCenter.y + reserve) {
+        SetMousePosition(mousePos.x, screenCenter.y + reserve);
+    }
+    if (mousePos.x <= screenCenter.x - reserve || mousePos.x >= screenCenter.x + reserve ||
+        mousePos.y <= screenCenter.y - reserve || mousePos.y >= screenCenter.y + reserve) {
+        SetMousePosition(screenCenter.x, screenCenter.y);
+        HideCursor();
+
+    }
+}

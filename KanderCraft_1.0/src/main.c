@@ -6,19 +6,13 @@
 #include "../include/config.h"
 #include "../include/block.h"
 
+
+
 int main() {
 
     Block_orient sour;
     Vector5 Collision_data;
-    for (int z = 0; z < TOTAL_CHUNKS * CHUNK_LENGTH - 1; z++) {
-        for (int y = 0; y < TOTAL_CHUNKS * CHUNK_DEPTH - 1; y++) {
-            for (int x = 0; x < TOTAL_CHUNKS * CHUNK_WIDTH - 1; x++) {
-                sour.sour_x[x] = x;
-                sour.sour_y[y] = y;
-                sour.sour_z[z] = z;
-            }
-        }
-    }
+    prepeare_block_ori(&sour);
 
     Player_config data_player;
 
@@ -38,7 +32,7 @@ int main() {
     world_generator(&data_world, &data_player);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
-
+    ToggleBorderlessWindowed();
     Textures_K textures;
     init_textures(&textures);
 
@@ -52,7 +46,7 @@ int main() {
     create_camera(&camera, &screenCenter, &cameralast);
 
     while (!WindowShouldClose()) {
-        
+        Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
         ClearBackground(BLUE);
@@ -61,8 +55,6 @@ int main() {
         draw_blocks(&data_world, &data_player, &block_model, &sour);
 
         Collision_data = detectCollision(camera, &data_world);
-        DrawGrid(1000, 10);
-        DrawRay((Ray){.position = {0,0,0}, .direction = {0,1,0}}, RED);
         EndMode3D();
         Game_input(Collision_data, &data_world);
 

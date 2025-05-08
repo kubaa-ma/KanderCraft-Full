@@ -14,5 +14,6 @@ int create_config(Player_config *data);
 int load_config(Player_config *data);
 int save_config(Player_config *data);
 
+void Centering_cursor();
 
 #endif

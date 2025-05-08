@@ -109,7 +109,8 @@ Vector5 detectCollision(Camera camera, World *data_world){
             }
         }
     }
-    DrawBoundingBox(data_world->data_chunks[datas.cx][datas.cz].data_blocks[datas.y][datas.x][datas.z].box, WHITE);
+    if (datas.cx != -1 && datas.cz != -1 && datas.y != -1 && datas.x != -1 && datas.z != -1) {
+    DrawBoundingBox(data_world->data_chunks[datas.cx][datas.cz].data_blocks[datas.y][datas.x][datas.z].box, WHITE);}
     return datas;
 
 }
@@ -125,3 +126,14 @@ void Game_input(Vector5 Collision_data, World *data_world) {
     }
 }
 
+void prepeare_block_ori(Block_orient *sour){
+    for (int z = 0; z < TOTAL_CHUNKS * CHUNK_LENGTH - 1; z++) {
+        for (int y = 0; y < TOTAL_CHUNKS * CHUNK_DEPTH - 1; y++) {
+            for (int x = 0; x < TOTAL_CHUNKS * CHUNK_WIDTH - 1; x++) {
+                sour->sour_x[x] = x;
+                sour->sour_y[y] = y;
+                sour->sour_z[z] = z;
+            }
+        }
+    }
+}

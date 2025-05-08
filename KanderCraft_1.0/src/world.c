@@ -119,8 +119,6 @@ void world_generator(World *data_world, Player_config *data) {
                         ) {
                             blocks[k][l][m].type = BLOCK_AIR;
                         }
-                        blocks[CHUNK_DEPTH - 2][4][2].type = BLOCK_AIR;
-                        blocks[CHUNK_DEPTH - 3][4][2].type = BLOCK_AIR;
 
                         if (blocks[k][l][m].type != BLOCK_AIR) {
                             blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
@@ -180,5 +178,4 @@ void settle_blocks(World *world) {
         }
     }
 }
-
 
