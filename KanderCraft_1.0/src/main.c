@@ -15,7 +15,7 @@ int main() {
     }
 
     World data_world;
-    data_world.data_chunks = allocate_chunk(&data_player);
+    data_world.data_chunks = allocate_chunk();
 
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {

@@ -54,8 +54,8 @@ void free_blocks(Block ***blocks) {
     free(blocks);
 }
 
-Chunk** allocate_chunk(const Player_config *data) {
-    int size = data->render_distance;
+Chunk** allocate_chunk() {
+    int size = TOTAL_CHUNKS;
 
     Chunk** data_chunks = malloc(size * sizeof(Chunk*));
     if (!data_chunks) {
@@ -92,8 +92,8 @@ Chunk** allocate_chunk(const Player_config *data) {
 }
 
 void destroy_world(World *data_world, const Player_config *data){
-    for (int i = 0; i < data->render_distance; i++){
-        for (int j = 0; j < data->render_distance; j++){
+    for (int i = 0; i < TOTAL_CHUNKS; i++){
+        for (int j = 0; j < TOTAL_CHUNKS; j++){
             free_blocks(data_world->data_chunks[i][j].data_blocks);
         }
         free(data_world->data_chunks[i]);

@@ -10,7 +10,7 @@
 
 #define CHUNK_WIDTH 16
 #define CHUNK_LENGTH  16
-#define CHUNK_DEPTH 100
+#define CHUNK_DEPTH 10
 
 typedef struct{
     Block ***data_blocks;
@@ -20,7 +20,7 @@ typedef struct{
     Chunk** data_chunks;
 }World;
 
-Chunk** allocate_chunk(const Player_config *data);
+Chunk** allocate_chunk();
 Block ***allocate_blocks();
 
 void free_blocks(Block ***blocks);
