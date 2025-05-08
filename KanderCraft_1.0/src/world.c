@@ -112,7 +112,6 @@ void world_generator(World *data_world, Player_config *data) {
     
                         blocks[k][l][m].type = BLOCK_DIRT;
     
-                        // Pokud je blok na hraně světa, nastavíme ho na vzduch
                         if (
                             l == 0 || l == CHUNK_WIDTH - 1 ||
                             m == 0 || m == CHUNK_LENGTH - 1 ||
@@ -130,8 +129,8 @@ void world_generator(World *data_world, Player_config *data) {
                                 (float)(i * CHUNK_LENGTH + m)
                             };
     
-                            blocks[k][l][m].box.min = (Vector3){pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f};
-                            blocks[k][l][m].box.max = (Vector3){pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f};
+                            blocks[k][l][m].box.min = (Vector3){pos.x - 0.0f, pos.y - 0.0f, pos.z - 0.0f};
+                            blocks[k][l][m].box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
                         }
                     }
                 }

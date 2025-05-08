@@ -60,6 +60,7 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                             if (block.visible_faces & FACE_FRONT) {
                                 DrawModelEx(*block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE);
                             }
+                            DrawBoundingBox(block.box, WHITE);
                         }
                     }
                 }
