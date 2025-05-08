@@ -34,12 +34,12 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                         Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
 
                         if (block.features & VISIBLE) {
-                            Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f};
-                            Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 15.0f};
-                            Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};
-                            Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f};
-                            Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f};
-                            Vector3 position_right = (Vector3){sour->sour_x[x] + (float)(CHUNK_WIDTH - 1), sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};
+                            Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f};//
+                            Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f};//
+                            Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};//
+                            Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f};//
+                            Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 1.0f};//
+                            Vector3 position_right = (Vector3){sour->sour_x[x] + 1.0f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};//
 
 
                             if (block.visible_faces & FACE_RIGHT) {

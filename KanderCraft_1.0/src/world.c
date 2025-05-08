@@ -107,31 +107,37 @@ void world_generator(World *data_world, Player_config *data) {
             for (int k = 0; k < CHUNK_DEPTH; k++) {
                 for (int l = 0; l < CHUNK_WIDTH; l++) {
                     for (int m = 0; m < CHUNK_LENGTH; m++) {
-
-                        Block *block = &data_world->data_chunks[i][j].data_blocks[k][l][m];
-                        block->type = BLOCK_DIRT;
-
-                        if (k == 0 || k == CHUNK_DEPTH - 1) {
-                            block->type = BLOCK_AIR;
+    
+                        Block ***blocks = data_world->data_chunks[i][j].data_blocks;
+    
+                        blocks[k][l][m].type = BLOCK_DIRT;
+    
+                        // Pokud je blok na hraně světa, nastavíme ho na vzduch
+                        if (
+                            l == 0 || l == CHUNK_WIDTH - 1 ||
+                            m == 0 || m == CHUNK_LENGTH - 1 ||
+                            k == 0 || k == CHUNK_DEPTH - 1 
+                        ) {
+                            blocks[k][l][m].type = BLOCK_AIR;
                         }
 
-                        if (block->type != BLOCK_AIR) {
-                            block->features = SOLID | OPAQUE | VISIBLE;
-
+                        if (blocks[k][l][m].type != BLOCK_AIR) {
+                            blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
+    
                             Vector3 pos = {
                                 (float)(j * CHUNK_WIDTH + l),
                                 (float)k,
                                 (float)(i * CHUNK_LENGTH + m)
                             };
-
-                            block->box.min = (Vector3){pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f};
-                            block->box.max = (Vector3){pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f};
+    
+                            blocks[k][l][m].box.min = (Vector3){pos.x - 0.5f, pos.y - 0.5f, pos.z - 0.5f};
+                            blocks[k][l][m].box.max = (Vector3){pos.x + 0.5f, pos.y + 0.5f, pos.z + 0.5f};
                         }
                     }
                 }
             }
         }
-    }
+    }    
 }
 
 void settle_blocks(World *world) {
