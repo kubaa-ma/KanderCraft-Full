@@ -7,10 +7,13 @@
 
 void init_textures(Textures_K *data) {
     data->dirt = LoadTexture("assets/dirt.png");
+    data->cursor = LoadTexture("assets/cursor.png");
+
 }
 
 void unload_textures(Textures_K *data) {
     UnloadTexture(data->dirt);
+    UnloadTexture(data->cursor);
 }
 
 void init_model(Model *block_model, Textures_K *texture_data){
