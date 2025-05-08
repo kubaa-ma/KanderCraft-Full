@@ -26,6 +26,6 @@ Block ***allocate_blocks();
 void free_blocks(Block ***blocks);
 void destroy_world(World *data_world, const Player_config *data);
 void world_generator(World *data_world, Player_config *data);
-void settle_blocks(World *data_world, Player_config *data);
+void settle_blocks(World *data_world);
 
 #endif

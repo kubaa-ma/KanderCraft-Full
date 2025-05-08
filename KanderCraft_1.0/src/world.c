@@ -134,38 +134,38 @@ void world_generator(World *data_world, Player_config *data) {
     }
 }
 
-void settle_blocks(World *data_world, Player_config *data) {
-    for (int i = 0; i < TOTAL_CHUNKS; i++) {
-        for (int j = 0; j < TOTAL_CHUNKS; j++) {
-            for (int k = 0; k < CHUNK_DEPTH; k++) {
-                for (int l = 0; l < CHUNK_WIDTH; l++) {
-                    for (int m = 0; m < CHUNK_LENGTH; m++) {
+void settle_blocks(World *world) {
+    for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
+        for (int cz = 0; cz < TOTAL_CHUNKS; cz++) {
+            for (int y = 0; y < CHUNK_DEPTH; y++) {
+                for (int x = 0; x < CHUNK_WIDTH; x++) {
+                    for (int z = 0; z < CHUNK_LENGTH; z++) {
 
-                        Block *block = &data_world->data_chunks[i][j].data_blocks[k][l][m];
+                        Block *block = &world->data_chunks[cx][cz].data_blocks[y][x][z];
+
+                        if (!(block->features & VISIBLE)) {
+                            block->visible_faces = 0;
+                            continue;
+                        }
+
                         block->visible_faces = 0;
 
-                        if (k + 1 < CHUNK_DEPTH &&
-                            !(data_world->data_chunks[i][j].data_blocks[k + 1][l][m].features & VISIBLE))
+                        if (y + 1 >= CHUNK_DEPTH || !(world->data_chunks[cx][cz].data_blocks[y + 1][x][z].features & VISIBLE))
                             block->visible_faces |= FACE_TOP;
 
-                        if (k - 1 >= 0 &&
-                            !(data_world->data_chunks[i][j].data_blocks[k - 1][l][m].features & VISIBLE))
+                        if (y - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y - 1][x][z].features & VISIBLE))
                             block->visible_faces |= FACE_BOTTOM;
 
-                        if (l + 1 < CHUNK_WIDTH &&
-                            !(data_world->data_chunks[i][j].data_blocks[k][l + 1][m].features & VISIBLE))
+                        if (x + 1 >= CHUNK_WIDTH || !(world->data_chunks[cx][cz].data_blocks[y][x + 1][z].features & VISIBLE))
                             block->visible_faces |= FACE_RIGHT;
 
-                        if (l - 1 >= 0 &&
-                            !(data_world->data_chunks[i][j].data_blocks[k][l - 1][m].features & VISIBLE))
+                        if (x - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y][x - 1][z].features & VISIBLE))
                             block->visible_faces |= FACE_LEFT;
 
-                        if (m + 1 < CHUNK_LENGTH &&
-                            !(data_world->data_chunks[i][j].data_blocks[k][l][m + 1].features & VISIBLE))
+                        if (z + 1 >= CHUNK_LENGTH || !(world->data_chunks[cx][cz].data_blocks[y][x][z + 1].features & VISIBLE))
                             block->visible_faces |= FACE_BACK;
 
-                        if (m - 1 >= 0 &&
-                            !(data_world->data_chunks[i][j].data_blocks[k][l][m - 1].features & VISIBLE))
+                        if (z - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y][x][z - 1].features & VISIBLE))
                             block->visible_faces |= FACE_FRONT;
                     }
                 }

@@ -62,6 +62,7 @@
     "render_world.h": "c",
     "player_configuration.h": "c",
     "world.h": "c",
-    "block.h": "c"
+    "block.h": "c",
+    "stdint.h": "c"
   }
 }

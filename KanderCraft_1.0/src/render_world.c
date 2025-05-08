@@ -21,21 +21,21 @@ void init_model(Model *block_model, Textures_K *texture_data){
     
     block_model->materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->dirt;
     
-    UnloadMesh(plane_mesh);
+    //UnloadMesh(plane_mesh);
 }
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model) {
     for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
         for (int cz = 0; cz < TOTAL_CHUNKS; cz++) {
-            for (int y = 0; y < 1; y++) {
-                for (int x = 0; x < 1; x++) {
-                    for (int z = 0; z < 1; z++) {
+            for (int y = 0; y < CHUNK_DEPTH; y++) {
+                for (int x = 0; x < CHUNK_WIDTH; x++) {
+                    for (int z = 0; z < CHUNK_LENGTH; z++) {
 
                         Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
 
                         if (block.features & VISIBLE) {
                             Vector3 position = {
-                                (float)(cx * CHUNK_WIDTH + x) * BLOCK_SITE_SIZE,  // x
+                                (float)((cx * 2) * CHUNK_WIDTH * 2 + x) * BLOCK_SITE_SIZE,  // x
                                 (float)(y) * BLOCK_SITE_SIZE,                      // y
                                 (float)(cz * CHUNK_LENGTH + z) * BLOCK_SITE_SIZE   // z
                             };
@@ -65,3 +65,5 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
         }
     }
 }
+
+

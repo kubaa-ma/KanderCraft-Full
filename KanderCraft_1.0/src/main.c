@@ -41,22 +41,27 @@ int main() {
 
     while (!WindowShouldClose()) {
         
-        settle_blocks(&data_world, &data_player);
+        settle_blocks(&data_world);
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
         ClearBackground(BLUE);
         BeginMode3D(camera);
+
+
         draw_blocks(&data_world, &data_player, &block_model);
+
         DrawGrid(1000, 10);
+        DrawRay((Ray){.position = {0,0,0}, .direction = {0,1,0}}, RED);
         EndMode3D();
+        DrawTexture(textures.dirt,10,10,WHITE);
         EndDrawing();
     }
 
     take_player_info(&data_player, &camera);
     save_config(&data_player);
 
-    for (int i = 0; i < data_player.render_distance; i++) {
-        for (int j = 0; j < data_player.render_distance; j++) {
+    for (int i = 0; i < TOTAL_CHUNKS; i++) {
+        for (int j = 0; j < TOTAL_CHUNKS; j++) {
             free_blocks(data_world.data_chunks[i][j].data_blocks);
         }
     }

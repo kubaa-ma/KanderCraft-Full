@@ -22,4 +22,5 @@ void unload_textures(Textures_K *data);
 void init_model(Model *block_model, Textures_K *texture_data);
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model);
+
 #endif
