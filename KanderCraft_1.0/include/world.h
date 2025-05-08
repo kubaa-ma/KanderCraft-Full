@@ -1,16 +1,14 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+
+
 #include "raylib.h"
 #include "stdbool.h"
 #include "block.h"
 #include "player_configuration.h"
+#include "world_config.h"
 
-#define TOTAL_CHUNKS 10
-
-#define CHUNK_WIDTH 16
-#define CHUNK_LENGTH  16
-#define CHUNK_DEPTH 10
 
 typedef struct{
     Block ***data_blocks;

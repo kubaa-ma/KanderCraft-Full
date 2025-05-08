@@ -4,23 +4,14 @@
 #include "raylib.h"
 #include "stdbool.h"
 #include <stdint.h>
+#include "world_config.h"
 
-#define BLOCK_SITE_SIZE 1.0f
+
 #define BLOCK_SIZE (Vector3){BLOCK_SITE_SIZE, BLOCK_SITE_SIZE, BLOCK_SITE_SIZE}
 
-#define ROT_RIGHT_SITE (Vector3){0.0f, 0.0f, 1.0f}
-#define ROT_LEFT_SITE (Vector3){0.0f, 0.0f, 1.0f}
-#define ROT_TOP_SITE (Vector3){0.0f, 0.0f, 0.0f}
-#define ROT_BOTTOM_SITE (Vector3){0.0f, 0.0f, 90.0f}
-#define ROT_FRONT_SITE (Vector3){90.0f, 0.0f, 0.0f}
-#define ROT_BACK_SITE (Vector3){1.0f, 0.0f, 0.0f}
 
-#define ROT_ANGLE_RIGHT -90.0f
-#define ROT_ANGLE_LEFT 90.0f
-#define ROT_ANGLE_TOP 0.0f
-#define ROT_ANGLE_BOTTOM 180.0f
-#define ROT_ANGLE_FRONT 90.0f
-#define ROT_ANGLE_BACK 270.0f
+
+
 
 #define FACE_RIGHT (1 << 0)
 #define FACE_LEFT (1 << 1)
@@ -49,5 +40,11 @@ typedef struct {
     B_features features;
 }Block;
 
+
+typedef struct {
+    float sour_x[TOTAL_CHUNKS * CHUNK_WIDTH];
+    float sour_y[TOTAL_CHUNKS * CHUNK_DEPTH];
+    float sour_z[TOTAL_CHUNKS * CHUNK_LENGTH];
+}Block_orient;
 
 #endif

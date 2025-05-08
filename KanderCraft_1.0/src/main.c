@@ -7,6 +7,17 @@
 
 int main() {
 
+    Block_orient sour;
+
+    for (int z = 0; z < TOTAL_CHUNKS * CHUNK_LENGTH - 1; z++) {
+        for (int y = 0; y < TOTAL_CHUNKS * CHUNK_DEPTH - 1; y++) {
+            for (int x = 0; x < TOTAL_CHUNKS * CHUNK_WIDTH - 1; x++) {
+                sour.sour_x[x] = x;
+                sour.sour_y[y] = y;
+                sour.sour_z[z] = z;
+            }
+        }
+    }
 
     Player_config data_player;
 
@@ -48,7 +59,7 @@ int main() {
         BeginMode3D(camera);
 
 
-        draw_blocks(&data_world, &data_player, &block_model);
+        draw_blocks(&data_world, &data_player, &block_model, &sour);
 
         DrawGrid(1000, 10);
         DrawRay((Ray){.position = {0,0,0}, .direction = {0,1,0}}, RED);
