@@ -85,7 +85,7 @@ bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int 
     return GetRayCollisionBox(ray, block.box).hit;
 }
 Vector5 detectCollision(Camera camera, World *data_world){
-    Vector5 datas;
+    Vector5 datas = { -1, -1, -1, -1, -1 };;
     Vector3 cameradirection = {camera.target.x - camera.position.x, camera.target.y - camera.position.y, camera.target.z - camera.position.z};
     cameradirection = NormalizeVector(cameradirection);
     
@@ -114,12 +114,14 @@ Vector5 detectCollision(Camera camera, World *data_world){
 
 }
 
-void Game_input(Vector5 data, World *data_world){
-
-    if(IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type != BLOCK_AIR){
-        data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type = BLOCK_AIR;
-    } 
-    if(IsMouseButtonPressed(MOUSE_BUTTON_RIGHT) && data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type != BLOCK_AIR){
-        data_world->data_chunks[data.cx][data.cz].data_blocks[data.y][data.x][data.z].type = BLOCK_DIRT;
+void Game_input(Vector5 Collision_data, World *data_world) {
+    if(Collision_data.cx != -1 && Collision_data.cz != -1 && Collision_data.y != -1 && Collision_data.x != -1 && Collision_data.z != -1){
+        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_AIR) {
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type = BLOCK_AIR;
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].features = 0b00000000;
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.min = (Vector3){999,999,999};
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.max = (Vector3){999,999,999};
+        }
     }
 }
+

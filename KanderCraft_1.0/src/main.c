@@ -64,12 +64,14 @@ int main() {
         DrawGrid(1000, 10);
         DrawRay((Ray){.position = {0,0,0}, .direction = {0,1,0}}, RED);
         EndMode3D();
+        Game_input(Collision_data, &data_world);
+
+    
         EndDrawing();
         settle_blocks(&data_world);
 
     }
 
-    Game_input(Collision_data, &data_world);
 
     take_player_info(&data_player, &camera);
     save_config(&data_player);
