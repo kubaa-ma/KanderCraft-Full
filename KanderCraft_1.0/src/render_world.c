@@ -74,33 +74,49 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 
 
 Vector3 NormalizeVector(Vector3 v) {
-    float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-    if (length != 0.0f) {
-        v.x /= length;
-        v.y /= length;
-        v.z /= length;
+    float lengthSq = v.x * v.x + v.y * v.y + v.z * v.z;
+    if (lengthSq > 0.000001f) {
+        float invLength = 1.0f / sqrtf(lengthSq);
+        v.x *= invLength;
+        v.y *= invLength;
+        v.z *= invLength;
     }
     return v;
 }
 
 bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int y, int x, int z) {
-    Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
-    return GetRayCollisionBox(ray, block.box).hit;
+    BoundingBox box = data_world->data_chunks[cx][cz].data_blocks[y][x][z].box;
+    RayCollision collision = GetRayCollisionBox(ray, box);
+    return collision.hit;
 }
-Vector5 detectCollision(Camera camera, World *data_world){
-    Vector5 datas = { -1, -1, -1, -1, -1 };;
-    Vector3 cameradirection = {camera.target.x - camera.position.x, camera.target.y - camera.position.y, camera.target.z - camera.position.z};
-    cameradirection = NormalizeVector(cameradirection);
-    
-    Ray ray = { camera.position, cameradirection };
+
+Vector5 detectCollision(Camera camera, World *data_world) {
+    Vector5 datas = { -1, -1, -1, -1, -1 };
+
+    Vector3 camDir = {
+        camera.target.x - camera.position.x,
+        camera.target.y - camera.position.y,
+        camera.target.z - camera.position.z
+    };
+    camDir = NormalizeVector(camDir);
+
+    Ray ray = { camera.position, camDir };
     DrawRay(ray, BLUE);
+
+    float minDistance = FLT_MAX;
+
     for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
         for (int cz = 0; cz < TOTAL_CHUNKS; cz++) {
             for (int y = 0; y < CHUNK_DEPTH; y++) {
                 for (int x = 0; x < CHUNK_WIDTH; x++) {
                     for (int z = 0; z < CHUNK_LENGTH; z++) {
 
-                        if (CheckRayCollisionWithBlock(ray, data_world, cx, cz, y, x, z)) {
+                        BoundingBox box = data_world->data_chunks[cx][cz].data_blocks[y][x][z].box;
+                        RayCollision collision = GetRayCollisionBox(ray, box);
+
+                        if (collision.hit && collision.distance < minDistance) {
+                            minDistance = collision.distance;
+
                             datas.cx = cx;
                             datas.cz = cz;
                             datas.x = x;
@@ -112,10 +128,14 @@ Vector5 detectCollision(Camera camera, World *data_world){
             }
         }
     }
-    if (datas.cx != -1 && datas.cz != -1 && datas.y != -1 && datas.x != -1 && datas.z != -1) {
-    DrawBoundingBox(data_world->data_chunks[datas.cx][datas.cz].data_blocks[datas.y][datas.x][datas.z].box, WHITE);}
-    return datas;
 
+    if (datas.cx != -1) {
+        BoundingBox hitBox = data_world->data_chunks[datas.cx][datas.cz]
+                             .data_blocks[datas.y][datas.x][datas.z].box;
+        DrawBoundingBox(hitBox, WHITE);
+    }
+
+    return datas;
 }
 
 void Game_input(Vector5 Collision_data, World *data_world) {

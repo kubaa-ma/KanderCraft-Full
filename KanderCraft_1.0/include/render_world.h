@@ -3,6 +3,7 @@
 
 #include "raylib.h"
 #include "world.h"
+#include <float.h> 
 
 #define SCREEN_WIDTH 1920
 #define SCREEN_HEIGHT 1080

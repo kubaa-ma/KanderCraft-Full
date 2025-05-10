@@ -32,7 +32,7 @@ int main() {
     world_generator(&data_world, &data_player);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
-    //ToggleBorderlessWindowed();
+    ToggleBorderlessWindowed();
     Textures_K textures;
     init_textures(&textures);
 
