@@ -56,7 +56,7 @@ int main() {
 
         Collision_data = detectCollision(camera, &data_world);
         EndMode3D();
-        Game_input(Collision_data, &data_world);
+        Game_input(Collision_data, &data_world, camera);
 
         DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();

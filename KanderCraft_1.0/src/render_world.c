@@ -90,6 +90,26 @@ bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int 
     return collision.hit;
 }
 
+Vector3 GetHitNormal(Ray ray, BoundingBox box) {
+    RayCollision collision = GetRayCollisionBox(ray, box);
+    Vector3 normal = { 0, 0, 0 };
+
+    if (!collision.hit) return normal;
+
+    Vector3 point = collision.point;
+    const float EPSILON = 0.001f;
+
+    if (fabsf(point.x - box.min.x) < EPSILON) normal.x = -1;
+    else if (fabsf(point.x - box.max.x) < EPSILON) normal.x = 1;
+    else if (fabsf(point.y - box.min.y) < EPSILON) normal.y = -1;
+    else if (fabsf(point.y - box.max.y) < EPSILON) normal.y = 1;
+    else if (fabsf(point.z - box.min.z) < EPSILON) normal.z = -1;
+    else if (fabsf(point.z - box.max.z) < EPSILON) normal.z = 1;
+
+    return normal;
+}
+
+
 Vector5 detectCollision(Camera camera, World *data_world) {
     Vector5 datas = { -1, -1, -1, -1, -1 };
 
@@ -137,14 +157,56 @@ Vector5 detectCollision(Camera camera, World *data_world) {
 
     return datas;
 }
+void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
+    if(Collision_data.cx != -1 && Collision_data.cz != -1 &&
+       Collision_data.y != -1 && Collision_data.x != -1 && Collision_data.z != -1) {
 
-void Game_input(Vector5 Collision_data, World *data_world) {
-    if(Collision_data.cx != -1 && Collision_data.cz != -1 && Collision_data.y != -1 && Collision_data.x != -1 && Collision_data.z != -1){
-        if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) && data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_AIR) {
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type = BLOCK_AIR;
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].features = 0b00000000;
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.min = (Vector3){999,999,999};
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.max = (Vector3){999,999,999};
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT) &&
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_AIR) {
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type = BLOCK_AIR;
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].features = 0b00000000;
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.min = (Vector3){999,999,999};
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.max = (Vector3){999,999,999};
+        }
+
+        if (IsMouseButtonDown(MOUSE_BUTTON_RIGHT)) {
+
+            Vector3 camDir = NormalizeVector((Vector3){
+                camera.target.x - camera.position.x,
+                camera.target.y - camera.position.y,
+                camera.target.z - camera.position.z
+            });
+            Ray ray = { camera.position, camDir };
+
+            BoundingBox box = data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+                              .data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box;
+
+            Vector3 normal = GetHitNormal(ray, box);
+
+            int newX = Collision_data.x + (int)normal.x;
+            int newY = Collision_data.y + (int)normal.y;
+            int newZ = Collision_data.z + (int)normal.z;
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[newY][newX][newZ].features = 0b00000111;
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[newY][newX][newZ].box.min = (Vector3){newX, newY, newZ};
+
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz]
+            .data_blocks[newY][newX][newZ].box.max = (Vector3){newX + 1.0f, newY + 1.0f, newZ + 1.0f};
         }
     }
 }
