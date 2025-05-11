@@ -6,7 +6,9 @@
 
 #define CHUNK_WIDTH 16
 #define CHUNK_LENGTH 16 
-#define CHUNK_DEPTH 100
+#define CHUNK_DEPTH 70
+#define MAX_SIZE CHUNK_DEPTH * TOTAL_CHUNKS //ONLY IF CHUNK_WIDTH = CHUNK_LENGTH
+
 
 #define ROT_RIGHT_SITE (Vector3){0.0f, 0.0f, 1.0f}
 #define ROT_LEFT_SITE (Vector3){0.0f, 0.0f, 1.0f}

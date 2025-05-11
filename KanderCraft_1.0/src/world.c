@@ -112,12 +112,16 @@ void world_generator(World *data_world, Player_config *data) {
     
                         blocks[k][l][m].type = BLOCK_DIRT;
     
+                        if(k > 50){
+                            blocks[k][l][m].type = BLOCK_AIR;
+
+                        }
 
                         if (blocks[k][l][m].type != BLOCK_AIR) {
                             blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
     
                             Vector3 pos = {(float)(i * CHUNK_WIDTH + l), (float)k, (float)(j * CHUNK_LENGTH + m)};
-    
+                            
                             blocks[k][l][m].box.min = (Vector3){pos.x - 0.0f, pos.y - 0.0f, pos.z - 0.0f};
                             blocks[k][l][m].box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
                         }

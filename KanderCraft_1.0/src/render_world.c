@@ -28,9 +28,23 @@ void init_model(Model *block_model, Textures_K *texture_data){
     //UnloadMesh(plane_mesh);
 }
 
-void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour) {
-    for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
-        for (int cz = 0; cz < TOTAL_CHUNKS; cz++) {
+void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera) {
+
+    int player_chunk_x = data_camera.position.x / MAX_SIZE;
+    int player_chunk_z = data_camera.position.z / MAX_SIZE;
+
+    int START_X = player_chunk_x - data_player->render_distance;
+    int END_X   = player_chunk_x + data_player->render_distance;
+    int START_Z = player_chunk_z - data_player->render_distance;
+    int END_Z   = player_chunk_z + data_player->render_distance;
+
+    if (START_X < 0) START_X = 0;
+    if (START_Z < 0) START_Z = 0;
+    if (END_X > TOTAL_CHUNKS) END_X = TOTAL_CHUNKS;
+    if (END_Z > TOTAL_CHUNKS) END_Z = TOTAL_CHUNKS;
+
+    for (int cx = START_X; cx < END_X; cx++) {
+        for (int cz = START_Z; cz < END_Z; cz++) {
             for (int y = 0; y < CHUNK_DEPTH; y++) {
                 for (int x = 0; x < CHUNK_WIDTH; x++) {
                     for (int z = 0; z < CHUNK_LENGTH; z++) {
@@ -69,7 +83,7 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                             if (block.visible_faces & FACE_FRONT) {
                                 DrawModelEx(*block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE);
                             }
-                            
+
                             //DrawBoundingBox(block.box, WHITE);
                         }
                     }

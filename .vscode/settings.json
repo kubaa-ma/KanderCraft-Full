@@ -64,6 +64,8 @@
     "world.h": "c",
     "block.h": "c",
     "stdint.h": "c",
-    "config.h": "c"
+    "config.h": "c",
+    "world_config.h": "c",
+    "raylib.h": "c"
   }
 }

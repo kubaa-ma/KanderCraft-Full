@@ -54,7 +54,7 @@ int main() {
         ClearBackground(SKYBLUE);
         BeginMode3D(camera);
 
-        draw_blocks(&data_world, &data_player, &block_model, &sour);
+        draw_blocks(&data_world, &data_player, &block_model, &sour, camera);
 
         Collision_data = detectCollision(camera, &data_world);
         EndMode3D();
