@@ -1,11 +1,11 @@
 #pragma once
 
-#define TOTAL_CHUNKS 1
+#define TOTAL_CHUNKS 2
 
 #define BLOCK_SITE_SIZE 0.1f
 
-#define CHUNK_WIDTH 17
-#define CHUNK_LENGTH 17 
+#define CHUNK_WIDTH 16
+#define CHUNK_LENGTH 16 
 #define CHUNK_DEPTH 100
 
 #define ROT_RIGHT_SITE (Vector3){0.0f, 0.0f, 1.0f}

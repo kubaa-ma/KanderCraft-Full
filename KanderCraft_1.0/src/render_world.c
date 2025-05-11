@@ -35,15 +35,20 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                 for (int x = 0; x < CHUNK_WIDTH; x++) {
                     for (int z = 0; z < CHUNK_LENGTH; z++) {
 
+                        int c_distance_x = 0;
+                        int c_distance_z = 0;
+                        c_distance_x = cx * CHUNK_WIDTH;
+                        c_distance_z = cz * CHUNK_LENGTH;
+
                         Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
 
                         if (block.features & VISIBLE) {
-                            Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f};//
-                            Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f};//
-                            Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};//
-                            Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f};//
-                            Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 1.0f};//
-                            Vector3 position_right = (Vector3){sour->sour_x[x] + 1.0f, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f};//
+                            Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                            Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f + c_distance_z};//
+                            Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                            Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                            Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 1.0f + c_distance_z};//
+                            Vector3 position_right = (Vector3){sour->sour_x[x] + 1.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
 
 
                             if (block.visible_faces & FACE_RIGHT) {
@@ -64,6 +69,7 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                             if (block.visible_faces & FACE_FRONT) {
                                 DrawModelEx(*block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE);
                             }
+                            
                             //DrawBoundingBox(block.box, WHITE);
                         }
                     }
@@ -153,7 +159,13 @@ Vector5 detectCollision(Camera camera, World *data_world) {
 
     return datas;
 }
+
 void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
+    int c_distance_x = 0;
+    int c_distance_z = 0;
+    c_distance_z = Collision_data.cx * CHUNK_WIDTH;
+    c_distance_x = Collision_data.cz * CHUNK_LENGTH;
+
     if(Collision_data.cx != -1 && Collision_data.cz != -1 &&
        Collision_data.y != -1 && Collision_data.x != -1 && Collision_data.z != -1) {
 
@@ -178,8 +190,8 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
 
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.min = (Vector3){newX, newY, newZ};
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.max = (Vector3){newX + 1.0f, newY + 1.0f, newZ + 1.0f};
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.min = (Vector3){newX + c_distance_z, newY, newZ + c_distance_x};
+            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.max = (Vector3){newX + 1.0f + c_distance_z, newY + 1.0f, newZ + 1.0f + c_distance_x};
         }
     }
 }

@@ -112,22 +112,11 @@ void world_generator(World *data_world, Player_config *data) {
     
                         blocks[k][l][m].type = BLOCK_DIRT;
     
-                        if (
-                            l == 0 || l == CHUNK_WIDTH - 1 ||
-                            m == 0 || m == CHUNK_LENGTH - 1 ||
-                            k == 0 || k == CHUNK_DEPTH - 1 
-                        ) {
-                            blocks[k][l][m].type = BLOCK_AIR;
-                        }
 
                         if (blocks[k][l][m].type != BLOCK_AIR) {
                             blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
     
-                            Vector3 pos = {
-                                (float)(j * CHUNK_WIDTH + l),
-                                (float)k,
-                                (float)(i * CHUNK_LENGTH + m)
-                            };
+                            Vector3 pos = {(float)(i * CHUNK_WIDTH + l), (float)k, (float)(j * CHUNK_LENGTH + m)};
     
                             blocks[k][l][m].box.min = (Vector3){pos.x - 0.0f, pos.y - 0.0f, pos.z - 0.0f};
                             blocks[k][l][m].box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
@@ -155,27 +144,52 @@ void settle_blocks(World *world) {
 
                         block->visible_faces = 0;
 
+                        // FACE_TOP
                         if (y + 1 >= CHUNK_DEPTH || !(world->data_chunks[cx][cz].data_blocks[y + 1][x][z].features & VISIBLE))
                             block->visible_faces |= FACE_TOP;
 
+                        // FACE_BOTTOM
                         if (y - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y - 1][x][z].features & VISIBLE))
                             block->visible_faces |= FACE_BOTTOM;
 
-                        if (x + 1 >= CHUNK_WIDTH || !(world->data_chunks[cx][cz].data_blocks[y][x + 1][z].features & VISIBLE))
+                        // FACE_RIGHT
+                        if (x + 1 >= CHUNK_WIDTH) {
+                            if (cx + 1 >= TOTAL_CHUNKS || !(world->data_chunks[cx + 1][cz].data_blocks[y][0][z].features & VISIBLE))
+                                block->visible_faces |= FACE_RIGHT;
+                        } else if (!(world->data_chunks[cx][cz].data_blocks[y][x + 1][z].features & VISIBLE)) {
                             block->visible_faces |= FACE_RIGHT;
+                        }
 
-                        if (x - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y][x - 1][z].features & VISIBLE))
+                        // FACE_LEFT
+                        if (x - 1 < 0) {
+                            if (cx - 1 < 0 || !(world->data_chunks[cx - 1][cz].data_blocks[y][CHUNK_WIDTH - 1][z].features & VISIBLE))
+                                block->visible_faces |= FACE_LEFT;
+                        } else if (!(world->data_chunks[cx][cz].data_blocks[y][x - 1][z].features & VISIBLE)) {
                             block->visible_faces |= FACE_LEFT;
+                        }
 
-                        if (z + 1 >= CHUNK_LENGTH || !(world->data_chunks[cx][cz].data_blocks[y][x][z + 1].features & VISIBLE))
+                        // FACE_BACK
+                        if (z + 1 >= CHUNK_LENGTH) {
+                            if (cz + 1 >= TOTAL_CHUNKS || !(world->data_chunks[cx][cz + 1].data_blocks[y][x][0].features & VISIBLE))
+                                block->visible_faces |= FACE_BACK;
+                        } else if (!(world->data_chunks[cx][cz].data_blocks[y][x][z + 1].features & VISIBLE)) {
                             block->visible_faces |= FACE_BACK;
+                        }
 
-                        if (z - 1 < 0 || !(world->data_chunks[cx][cz].data_blocks[y][x][z - 1].features & VISIBLE))
+                        // FACE_FRONT
+                        if (z - 1 < 0) {
+                            if (cz - 1 < 0 || !(world->data_chunks[cx][cz - 1].data_blocks[y][x][CHUNK_LENGTH - 1].features & VISIBLE))
+                                block->visible_faces |= FACE_FRONT;
+                        } else if (!(world->data_chunks[cx][cz].data_blocks[y][x][z - 1].features & VISIBLE)) {
                             block->visible_faces |= FACE_FRONT;
+                        }
+
                     }
                 }
             }
         }
     }
 }
+
+
 

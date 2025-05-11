@@ -51,7 +51,7 @@ int main() {
         Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
-        ClearBackground(BLUE);
+        ClearBackground(SKYBLUE);
         BeginMode3D(camera);
 
         draw_blocks(&data_world, &data_player, &block_model, &sour);
