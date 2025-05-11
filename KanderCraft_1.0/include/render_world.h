@@ -14,6 +14,7 @@ typedef struct {
     Texture2D dirt;
     Texture2D grass[CUBE_SIDES];
     Texture2D cursor;
+    Font standrat_font;
 } Textures_K;
 
 

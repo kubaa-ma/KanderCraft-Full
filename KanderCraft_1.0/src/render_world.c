@@ -8,6 +8,7 @@
 void init_textures(Textures_K *data) {
     data->dirt = LoadTexture("assets/dirt.png");
     data->cursor = LoadTexture("assets/cursor.png");
+    data->standrat_font = LoadFont("assets/minecraft_font.ttf");
 
 }
 

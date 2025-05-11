@@ -10,6 +10,7 @@
 
 int main() {
 
+    bool is_on = false;
     Block_orient sour;
     Vector5 Collision_data;
     prepeare_block_ori(&sour);
@@ -46,6 +47,7 @@ int main() {
     create_camera(&camera, &screenCenter, &cameralast);
 
     while (!WindowShouldClose()) {
+        
         Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
@@ -57,7 +59,8 @@ int main() {
         Collision_data = detectCollision(camera, &data_world);
         EndMode3D();
         Game_input(Collision_data, &data_world, camera);
-
+        
+        game_settings(&is_on, textures.standrat_font, camera);
         DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
         settle_blocks(&data_world);
