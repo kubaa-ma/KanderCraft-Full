@@ -104,18 +104,35 @@ void destroy_world(World *data_world, const Player_config *data){
 void world_generator(World *data_world, Player_config *data) {
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
+            Block ***blocks = data_world->data_chunks[i][j].data_blocks;
             for (int k = 0; k < CHUNK_DEPTH; k++) {
                 for (int l = 0; l < CHUNK_WIDTH; l++) {
                     for (int m = 0; m < CHUNK_LENGTH; m++) {
-    
-                        Block ***blocks = data_world->data_chunks[i][j].data_blocks;
-    
+        
                         blocks[k][l][m].type = BLOCK_DIRT;
     
-                        if(k > 50){
+                        if(k > 50 && k < CHUNK_DEPTH){
                             blocks[k][l][m].type = BLOCK_AIR;
 
                         }
+
+                    if (i == 0 && l == 0) {
+                        blocks[k][l][m].type = BLOCK_AIR;
+                    }
+                    if (j == 0 && m == 0) {
+                        blocks[k][l][m].type = BLOCK_AIR;
+                    }
+                    if (k == 0) {
+                        blocks[k][l][m].type = BLOCK_AIR;
+                    }
+
+                
+                    if (i == TOTAL_CHUNKS - 1 && l == CHUNK_WIDTH - 1) {
+                        blocks[k][l][m].type = BLOCK_AIR;
+                    }
+                    if (j == TOTAL_CHUNKS - 1 && m == CHUNK_LENGTH - 1) {
+                        blocks[k][l][m].type = BLOCK_AIR;
+                    }
 
                         if (blocks[k][l][m].type != BLOCK_AIR) {
                             blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
@@ -124,6 +141,9 @@ void world_generator(World *data_world, Player_config *data) {
                             
                             blocks[k][l][m].box.min = (Vector3){pos.x - 0.0f, pos.y - 0.0f, pos.z - 0.0f};
                             blocks[k][l][m].box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
+                        } else if(blocks[k][l][m].type == BLOCK_AIR){
+                                blocks[k][l][m].features = 0;
+                                blocks[k][l][m].visible_faces = 0;
                         }
                     }
                 }
