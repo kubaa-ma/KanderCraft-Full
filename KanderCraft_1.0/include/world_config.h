@@ -4,8 +4,8 @@
 
 #define BLOCK_SITE_SIZE 0.1f
 
-#define CHUNK_WIDTH 16
-#define CHUNK_LENGTH 16 
+#define CHUNK_WIDTH 17 //Only Odd numbers
+#define CHUNK_LENGTH 17
 #define CHUNK_DEPTH 70
 #define MAX_SIZE CHUNK_DEPTH * TOTAL_CHUNKS //ONLY IF CHUNK_WIDTH = CHUNK_LENGTH
 
