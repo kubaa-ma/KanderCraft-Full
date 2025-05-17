@@ -8,6 +8,9 @@ typedef struct{
     float pos_z;
     float pos_y;
 
+    float tar_x;
+    float tar_y;
+    float tar_z;
     int render_distance;
 }Player_config;
 

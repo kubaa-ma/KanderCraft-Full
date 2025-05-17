@@ -9,6 +9,10 @@ int create_config(Player_config *data){
     data->pos_y = 52.0f;
     data->pos_z = 10.0f;
 
+    data->tar_x = 0.0f;
+    data->tar_y = 0.0f;
+    data->tar_z = 0.0f;
+
     config = fopen("game_settings/config.txt", "w");
 
     if(config == NULL){
@@ -16,7 +20,13 @@ int create_config(Player_config *data){
         return 1;
     }
 
-    fprintf(config, "RENDER DISTANCE: %d\nPLAYER X POS: %f\nPLAYER Z POS: %f\nPLAYER Y POS: %f", data->render_distance, data->pos_x, data->pos_z, data->pos_y);
+    fprintf(config, "RENDER DISTANCE: %d\n", data->render_distance);
+    fprintf(config, "PLAYER X POS: %f\n", data->pos_x);
+    fprintf(config, "PLAYER Z POS: %f\n", data->pos_z);
+    fprintf(config, "PLAYER Y POS: %f\n", data->pos_y);
+    fprintf(config, "PLAYER X TAR: %f\n", data->tar_x);
+    fprintf(config, "PLAYER Y TAR: %f\n", data->tar_y);
+    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);    
     fclose(config);
 
     return 0;
@@ -31,8 +41,17 @@ int save_config(Player_config *data){
         printf("The file does not exist");
         return 1;
     }
-
-    fprintf(config, "RENDER DISTANCE: %d\nPLAYER X POS: %f\nPLAYER Z POS: %f\nPLAYER Y POS: %f", data->render_distance, data->pos_x, data->pos_z, data->pos_y);
+    data->tar_x = 0.0f;
+    data->tar_y = 0.0f;
+    data->tar_z = 0.0f;
+    
+    fprintf(config, "RENDER DISTANCE: %d\n", data->render_distance);
+    fprintf(config, "PLAYER X POS: %f\n", data->pos_x);
+    fprintf(config, "PLAYER Z POS: %f\n", data->pos_z);
+    fprintf(config, "PLAYER Y POS: %f\n", data->pos_y);
+    fprintf(config, "PLAYER X TAR: %f\n", data->tar_x);
+    fprintf(config, "PLAYER Y TAR: %f\n", data->tar_y);
+    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);    
     fclose(config);
 
     return 0;
@@ -53,6 +72,9 @@ int load_config(Player_config *data){
     fscanf(config, "PLAYER X POS: %f\n", &data->pos_x);
     fscanf(config, "PLAYER Z POS: %f\n", &data->pos_z);
     fscanf(config, "PLAYER Y POS: %f\n", &data->pos_y);
+    fscanf(config, "PLAYER X TAR: %f\n", &data->tar_x);
+    fscanf(config, "PLAYER Y TAR: %f\n", &data->tar_y);
+    fscanf(config, "PLAYER Z TAR: %f\n", &data->tar_z);
 
 
     fclose(config);

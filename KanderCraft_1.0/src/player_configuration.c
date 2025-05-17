@@ -13,12 +13,19 @@ void take_player_info(Player_config *data, Camera *camera){
     data->pos_x = camera->position.x;
     data->pos_y = camera->position.y;
     data->pos_z = camera->position.z;
+    data->tar_x = camera->target.x;
+    data->tar_y = camera->target.y;
+    data->tar_z = camera->target.z;
 }
 
 void init_player(Player_config *data, Camera *camera){
     camera->position.x = data->pos_x;
     camera->position.y = data->pos_y;
     camera->position.z = data->pos_z;
+    camera->target.x = data->tar_x;
+    camera->target.y = data->tar_y;
+    camera->target.z = data->tar_z;
+
 }
 
 void side_info(Font standart, Camera camera){
