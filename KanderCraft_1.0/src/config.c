@@ -5,9 +5,9 @@ int create_config(Player_config *data){
     FILE *config;
 
     data->render_distance = RENDER_DISTANCE_STANDARD;
-    data->pos_x = 5.0f;
-    data->pos_y = 14.75f;
-    data->pos_z = 5.0f;
+    data->pos_x = 14.0f;
+    data->pos_y = 52.0f;
+    data->pos_z = 10.0f;
 
     config = fopen("game_settings/config.txt", "w");
 

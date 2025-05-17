@@ -10,6 +10,7 @@
 
 int main() {
 
+
     bool is_on = false;
     Block_orient sour;
     Vector5 Collision_data;
@@ -20,6 +21,7 @@ int main() {
     if (load_config(&data_player)) {
         create_config(&data_player);
     }
+
 
     World data_world;
     data_world.data_chunks = allocate_chunk();
@@ -60,7 +62,7 @@ int main() {
         EndMode3D();
         Game_input(Collision_data, &data_world, camera);
         
-        game_settings(&is_on, textures.standrat_font, camera);
+        game_settings(&is_on, textures.standrat_font, &camera);
         DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
         settle_blocks(&data_world);

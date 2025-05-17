@@ -21,3 +21,4 @@ clean:
 	[ -f "$(OUT)" ] && rm "$(OUT)"
 	[ -d "$(BUILD_DIR)" ] && rm -rf $(BUILD_DIR)/*.o
 	[ -d "$(BUILD_DIR)" ] && rmdir $(BUILD_DIR)
+	[ -f "game_settings/config.txt" ] && rm "game_settings/config.txt"

@@ -26,14 +26,14 @@ void side_info(Font standart, Camera camera){
         char side_Info[512];
         float frameTime = GetFrameTime();
         int fps_state = GetFPS();
-        sprintf(side_Info, "KanderCraft unreleased version\nMade by Kander\nFPS - %d\nFrame time - %f\nXYZ - %d / %d / %d\nTarget XYZ - %d / %d/ %d", fps_state, frameTime,
+        sprintf(side_Info, "KanderCraft unreleased version\nMade by Kander\nFPS - %d\nFrame time - %f\nXYZ - %d / %d / %d\nTarget XYZ - %d / %d/ %d\nCamera Fovy (Key: j,n): %f", fps_state, frameTime,
             (int)camera.position.x ,(int)camera.position.y, (int)camera.position.z, 
-            (int)camera.target.x, (int)camera.target.y, (int)camera.target.z);
+            (int)camera.target.x, (int)camera.target.y, (int)camera.target.z, camera.fovy);
         DrawTextPro(standart, side_Info, (Vector2){10, 10}, (Vector2){0,0}, 0, 18, 1.0f, WHITE);
 
 }
 
-void game_settings(bool *is_on, Font standart, Camera camera){
+void game_settings(bool *is_on, Font standart, Camera *camera){
     if (IsKeyPressed(KEY_F11)) {
         ToggleBorderlessWindowed();
     }
@@ -41,7 +41,11 @@ void game_settings(bool *is_on, Font standart, Camera camera){
         *is_on = !*is_on;
     }
     if(*is_on){
-        side_info(standart, camera);
-
+        side_info(standart, *camera);
+    }
+    if(IsKeyDown(KEY_J) && camera->fovy > 1){
+        camera->fovy -=0.5;
+    } else if(IsKeyDown(KEY_N) && camera->fovy < 130){
+        camera->fovy +=0.5;
     }
 }

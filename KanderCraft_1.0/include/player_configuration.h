@@ -20,5 +20,5 @@ void init_player(Player_config *data, Camera *camera);
 
 void side_info(Font standart, Camera camera);
 
-void game_settings(bool *is_on, Font standart, Camera camera);
+void game_settings(bool *is_on, Font standart, Camera *camera);
 #endif

@@ -138,7 +138,7 @@ Vector5 detectCollision(Camera camera, World *data_world) {
     camDir = NormalizeVector(camDir);
 
     Ray ray = { camera.position, camDir };
-    DrawRay(ray, BLUE);
+    //DrawRay(ray, BLUE);
 
     float minDistance = FLT_MAX;
 
