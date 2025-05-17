@@ -24,3 +24,10 @@
 #define ROT_ANGLE_FRONT -90.0f
 #define ROT_ANGLE_BACK -270.0f
 
+typedef struct{
+    int cx; 
+    int cz; 
+    int y;
+    int x;
+    int z;
+}Vector5;

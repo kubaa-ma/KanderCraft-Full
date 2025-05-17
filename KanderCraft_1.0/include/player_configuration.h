@@ -2,6 +2,7 @@
 #define PLAYER_CONFIG_H
 
 #include "raylib.h"
+#include "world_config.h"
 
 typedef struct{
     float pos_x;
@@ -12,6 +13,7 @@ typedef struct{
     float tar_y;
     float tar_z;
     int render_distance;
+    float fovy;
 }Player_config;
 
 
@@ -21,7 +23,7 @@ void take_player_info(Player_config *data, Camera *camera);
 
 void init_player(Player_config *data, Camera *camera);
 
-void side_info(Font standart, Camera camera);
+void side_info(Font standart, Camera camera, Vector5 Collisiondata);
 
-void game_settings(bool *is_on, Font standart, Camera *camera);
+void game_settings(bool *is_on, Font standart, Camera *camera, Vector5 Collisiondata);
 #endif

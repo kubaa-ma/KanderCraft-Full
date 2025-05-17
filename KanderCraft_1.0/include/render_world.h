@@ -18,13 +18,7 @@ typedef struct {
 } Textures_K;
 
 
-typedef struct{
-    int cx; 
-    int cz; 
-    int y;
-    int x;
-    int z;
-}Vector5;
+
 
 void init_textures(Textures_K *data);
 

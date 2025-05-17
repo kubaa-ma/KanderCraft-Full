@@ -5,13 +5,15 @@ int create_config(Player_config *data){
     FILE *config;
 
     data->render_distance = RENDER_DISTANCE_STANDARD;
-    data->pos_x = 14.0f;
-    data->pos_y = 52.0f;
-    data->pos_z = 10.0f;
+    data->pos_x = 14;
+    data->pos_y = 52;
+    data->pos_z = 10;
 
-    data->tar_x = 0.0f;
-    data->tar_y = 0.0f;
-    data->tar_z = 0.0f;
+    data->tar_x = 0;
+    data->tar_y = 0;
+    data->tar_z = 0;
+
+   data->fovy = 54;
 
     config = fopen("game_settings/config.txt", "w");
 
@@ -26,9 +28,9 @@ int create_config(Player_config *data){
     fprintf(config, "PLAYER Y POS: %f\n", data->pos_y);
     fprintf(config, "PLAYER X TAR: %f\n", data->tar_x);
     fprintf(config, "PLAYER Y TAR: %f\n", data->tar_y);
-    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);    
+    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);
+    fprintf(config, "PLAYER FOVY SET: %f\n", data->fovy);      
     fclose(config);
-
     return 0;
 }
 
@@ -41,17 +43,15 @@ int save_config(Player_config *data){
         printf("The file does not exist");
         return 1;
     }
-    data->tar_x = 0.0f;
-    data->tar_y = 0.0f;
-    data->tar_z = 0.0f;
-    
+
     fprintf(config, "RENDER DISTANCE: %d\n", data->render_distance);
     fprintf(config, "PLAYER X POS: %f\n", data->pos_x);
     fprintf(config, "PLAYER Z POS: %f\n", data->pos_z);
     fprintf(config, "PLAYER Y POS: %f\n", data->pos_y);
     fprintf(config, "PLAYER X TAR: %f\n", data->tar_x);
     fprintf(config, "PLAYER Y TAR: %f\n", data->tar_y);
-    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);    
+    fprintf(config, "PLAYER Z TAR: %f\n", data->tar_z);
+    fprintf(config, "PLAYER FOVY SET: %f\n", data->fovy);      
     fclose(config);
 
     return 0;
@@ -59,8 +59,6 @@ int save_config(Player_config *data){
 
 int load_config(Player_config *data){
     FILE *config;
-    char value[100];
-
     config = fopen("game_settings/config.txt", "r");
     
     if(config == NULL){
@@ -68,14 +66,31 @@ int load_config(Player_config *data){
         return 1;
     }
 
-    fscanf(config, "RENDER DISTANCE: %d\n", &data->render_distance);
-    fscanf(config, "PLAYER X POS: %f\n", &data->pos_x);
-    fscanf(config, "PLAYER Z POS: %f\n", &data->pos_z);
-    fscanf(config, "PLAYER Y POS: %f\n", &data->pos_y);
-    fscanf(config, "PLAYER X TAR: %f\n", &data->tar_x);
-    fscanf(config, "PLAYER Y TAR: %f\n", &data->tar_y);
-    fscanf(config, "PLAYER Z TAR: %f\n", &data->tar_z);
+    char line[128];
 
+    fgets(line, sizeof(line), config);
+    sscanf(line, "RENDER DISTANCE: %d", &data->render_distance);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER X POS: %f", &data->pos_x);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER Z POS: %f", &data->pos_z);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER Y POS: %f", &data->pos_y);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER X TAR: %f", &data->tar_x);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER Y TAR: %f", &data->tar_y);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER Z TAR: %f", &data->tar_z);
+
+    fgets(line, sizeof(line), config);
+    sscanf(line, "PLAYER FOVY SET: %f", &data->fovy);
 
     fclose(config);
 

@@ -45,8 +45,8 @@ int main() {
     Camera camera = { 0 };
     Vector2 screenCenter;
     Vector3 cameralast;
-    init_player(&data_player, &camera);
     create_camera(&camera, &screenCenter, &cameralast);
+    init_player(&data_player, &camera);
 
     while (!WindowShouldClose()) {
         
@@ -62,7 +62,7 @@ int main() {
         EndMode3D();
         Game_input(Collision_data, &data_world, camera);
         
-        game_settings(&is_on, textures.standrat_font, &camera);
+        game_settings(&is_on, textures.standrat_font, &camera, Collision_data);
         DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
         settle_blocks(&data_world);

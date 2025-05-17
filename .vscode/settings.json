@@ -66,6 +66,7 @@
     "stdint.h": "c",
     "config.h": "c",
     "world_config.h": "c",
-    "raylib.h": "c"
+    "raylib.h": "c",
+    "stdbool.h": "c"
   }
 }
