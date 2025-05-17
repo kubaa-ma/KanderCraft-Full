@@ -191,7 +191,7 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.max = (Vector3){999,999,999};
         }
 
-        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)) {
+        if (IsMouseButtonPressed(MOUSE_BUTTON_RIGHT)  && Collision_data.y < CHUNK_DEPTH -1) {
 
             Vector3 camDir = NormalizeVector((Vector3){camera.target.x - camera.position.x, camera.target.y - camera.position.y, camera.target.z - camera.position.z});
             Ray ray = { camera.position, camDir };

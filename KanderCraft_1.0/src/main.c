@@ -58,12 +58,16 @@ int main() {
 
         draw_blocks(&data_world, &data_player, &block_model, &sour, camera);
 
-        Collision_data = detectCollision(camera, &data_world);
+        if(IsKeyUp(KEY_L)){
+            Collision_data = detectCollision(camera, &data_world);
+        }
         EndMode3D();
         Game_input(Collision_data, &data_world, camera);
         
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data);
-        DrawTexture(textures.cursor, 0,0, WHITE);
+        if(IsKeyUp(KEY_L)){
+            DrawTexture(textures.cursor, 0,0, WHITE);
+        }
         EndDrawing();
         settle_blocks(&data_world);
 
