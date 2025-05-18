@@ -1,2 +1,5 @@
-- [ ] Allocate memory for 3D array
-- [ 1 ] Camera .txt file with configuration //player
+Known issues:
+
+- Sometimes the game doesn't load properly. If this happens, simply restart the game.
+- Placing blocks at the edge of a chunk (from a neighboring chunk) may cause the game to crash.
+

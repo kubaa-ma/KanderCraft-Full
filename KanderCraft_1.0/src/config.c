@@ -62,7 +62,6 @@ int load_config(Player_config *data){
     config = fopen("game_settings/config.txt", "r");
     
     if(config == NULL){
-        printf("The file does not exist");
         return 1;
     }
 

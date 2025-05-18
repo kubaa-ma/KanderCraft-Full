@@ -10,7 +10,9 @@
 
 int main() {
 
-
+    if(load_world_files("World1") == 1){
+        create_world_files("World1");
+    }
     bool is_on = false;
     Block_orient sour;
     Vector5 Collision_data;

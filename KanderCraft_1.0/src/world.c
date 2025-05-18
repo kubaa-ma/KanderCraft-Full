@@ -2,6 +2,84 @@
 #include "../include/block.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <direct.h>
+#include <errno.h>
+#include <string.h>
+
+int copy_file(const char *source_path, const char *dest_path) {
+    FILE *src = fopen(source_path, "rb");
+    if (!src) {
+        perror("Error opening source file");
+        return 1;
+    }
+
+    FILE *dst = fopen(dest_path, "wb");
+    if (!dst) {
+        perror("Error creating destination file");
+        fclose(src);
+        return 1;
+    }
+
+    char buffer[4096];
+    size_t bytes;
+
+    while ((bytes = fread(buffer, 1, sizeof(buffer), src)) > 0) {
+        fwrite(buffer, 1, bytes, dst);
+    }
+
+    fclose(src);
+    fclose(dst);
+    return 0;
+}
+
+int create_world_files(const char *world_name) {
+    if (_mkdir(PATH_WORLD_FILES) != 0 && errno != EEXIST) {
+        perror("Error creating main folder");
+        return 0;
+    }
+
+    char path_world[256];
+    snprintf(path_world, sizeof(path_world), "%s/%s", PATH_WORLD_FILES, world_name);
+    if (_mkdir(path_world) != 0 && errno != EEXIST) {
+        perror("Error creating world folder");
+    }
+
+    char path_chunks[256];
+    snprintf(path_chunks, sizeof(path_chunks), "%s/Chunks", path_world);
+    if (_mkdir(path_chunks) != 0 && errno != EEXIST) {
+        perror("Error creating 'Chunks' folder");
+    }
+
+    char path_icon[256];
+    snprintf(path_icon, sizeof(path_icon), "%s/Icon", path_world);
+    if (_mkdir(path_icon) != 0 && errno != EEXIST) {
+        perror("Error creating 'Icon' folder");
+    }
+
+    char dest_icon[256];
+    snprintf(dest_icon, sizeof(dest_icon), "%s/Icon/Icon.png", path_world);
+    if (copy_file("assets/dirt.png", dest_icon) != 0) {
+        printf("Error copying file 'dirt.png' (incompleted)\n");
+    }
+
+    return 1;
+}
+
+int load_world_files(const char *world_name) {
+    FILE *src;
+
+    char world_path[256];
+    snprintf(world_path, sizeof(world_path), "WorldFiles/%s/Icon/Icon.png", world_name);
+
+    src = fopen(world_path, "rb");
+    if (src == NULL) {
+        perror("Error opening icon");
+        return 1;
+    }
+
+    fclose(src);
+    return 0;
+}
 
 Block ***allocate_blocks() {
     Block ***blocks = malloc(CHUNK_DEPTH * sizeof(Block **));
