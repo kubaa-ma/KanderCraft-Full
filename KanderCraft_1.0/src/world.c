@@ -76,8 +76,84 @@ int load_world_files(const char *world_name) {
         perror("Error opening icon");
         return 1;
     }
+    
 
     fclose(src);
+    return 0;
+}
+
+int save_chunk(const char *world_name, int i, int j, Chunk *data) {
+    char ChunkPath[256];
+    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%c%d.dat", world_name, (char)(i + 65), j);
+
+    FILE *chunk = fopen(ChunkPath, "wb");
+    if (chunk == NULL) {
+        perror("Error opening chunk file for writing");
+        return 1;
+    }
+
+    for (int z = 0; z < CHUNK_DEPTH; z++) {
+        for (int x = 0; x < CHUNK_WIDTH; x++) {
+            for (int y = 0; y < CHUNK_LENGTH; y++) {
+                size_t written = fwrite(&data->data_blocks[z][x][y], sizeof(Block), 1, chunk);
+                if (written != 1) {
+                    perror("Error writing block");
+                    fclose(chunk);
+                    return 2;
+                }
+            }
+        }
+    }
+
+    fclose(chunk);
+    return 0;
+}
+int save_world(World *world, const char *world_name){
+    for(int i = 0; i < TOTAL_CHUNKS; i++){
+        for(int j = 0; j < TOTAL_CHUNKS; j++){
+            if (save_chunk(world_name, i, j, &world->data_chunks[i][j]) != 0) {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+int load_chunk(const char *world_name, int i, int j, Chunk *data){
+    char ChunkPath[256];
+    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%c%d.dat", world_name, (char)(i + 65), j);
+
+    FILE *chunk = fopen(ChunkPath, "rb");
+    if (chunk == NULL) {
+        perror("Error opening chunk file for writing");
+        return 1;
+    }
+
+    for (int z = 0; z < CHUNK_DEPTH; z++) {
+        for (int x = 0; x < CHUNK_WIDTH; x++) {
+            for (int y = 0; y < CHUNK_LENGTH; y++) {
+                size_t items_read = fread(&data->data_blocks[z][x][y], sizeof(Block), 1, chunk);
+                if (items_read != 1) {
+                    perror("Error reading block");
+                    fclose(chunk);
+                    return 2;
+                }
+            }
+        }
+    }
+    fclose(chunk);
+    return 0;
+
+}
+
+int load_world(World *world, const char *world_name){
+    for(int i = 0; i < TOTAL_CHUNKS; i++){
+        for(int j = 0; j < TOTAL_CHUNKS; j++){
+            if (load_chunk(world_name, i, j, &world->data_chunks[i][j]) != 0) {
+                return 1;
+            }
+        }
+    }
     return 0;
 }
 

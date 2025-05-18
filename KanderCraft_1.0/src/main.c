@@ -6,17 +6,9 @@
 #include "../include/config.h"
 #include "../include/block.h"
 
-
+#define WORLD_NAME "World1"
 
 int main() {
-
-    if(load_world_files("World1") == 1){
-        create_world_files("World1");
-    }
-    bool is_on = false;
-    Block_orient sour;
-    Vector5 Collision_data;
-    prepeare_block_ori(&sour);
 
     Player_config data_player;
 
@@ -24,17 +16,26 @@ int main() {
         create_config(&data_player);
     }
 
-
     World data_world;
     data_world.data_chunks = allocate_chunk();
 
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world.data_chunks[i][j].data_blocks = allocate_blocks();
+            world_generator(&data_world, &data_player);
         }
     }
 
-    world_generator(&data_world, &data_player);
+    if(load_world_files(WORLD_NAME) == 1){
+        create_world_files(WORLD_NAME);
+    } else{
+        load_world(&data_world, WORLD_NAME);
+    }
+    bool is_on = false;
+    Block_orient sour;
+    Vector5 Collision_data;
+    prepeare_block_ori(&sour);
+
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
     ToggleBorderlessWindowed();
@@ -75,6 +76,7 @@ int main() {
 
     }
 
+    save_world(&data_world, WORLD_NAME);
 
     take_player_info(&data_player, &camera);
     save_config(&data_player);
