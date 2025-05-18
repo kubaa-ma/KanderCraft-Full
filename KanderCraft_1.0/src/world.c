@@ -2,7 +2,7 @@
 #include "../include/block.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <direct.h>
+#include <direct.h>//Only for windows
 #include <errno.h>
 #include <string.h>
 
@@ -84,7 +84,7 @@ int load_world_files(const char *world_name) {
 
 int save_chunk(const char *world_name, int i, int j, Chunk *data) {
     char ChunkPath[256];
-    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%c%d.dat", world_name, (char)(i + 65), j);
+    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%d_%d.dat", world_name, i, j);
 
     FILE *chunk = fopen(ChunkPath, "wb");
     if (chunk == NULL) {
@@ -121,7 +121,7 @@ int save_world(World *world, const char *world_name){
 
 int load_chunk(const char *world_name, int i, int j, Chunk *data){
     char ChunkPath[256];
-    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%c%d.dat", world_name, (char)(i + 65), j);
+    snprintf(ChunkPath, sizeof(ChunkPath), "WorldFiles/%s/Chunks/Chunk_%d_%d.dat", world_name, i, j);
 
     FILE *chunk = fopen(ChunkPath, "rb");
     if (chunk == NULL) {
@@ -146,9 +146,22 @@ int load_chunk(const char *world_name, int i, int j, Chunk *data){
 
 }
 
-int load_world(World *world, const char *world_name){
-    for(int i = 0; i < TOTAL_CHUNKS; i++){
-        for(int j = 0; j < TOTAL_CHUNKS; j++){
+int load_world(World *world, const char *world_name, Camera *cam, Player_config *data_player){
+    int cam_chunk_x = (int)(cam->position.z/ CHUNK_WIDTH);
+    int cam_chunk_y = (int)(cam->position.x / CHUNK_LENGTH);
+
+    int start_x = cam_chunk_x - data_player->render_distance;
+    int end_x = cam_chunk_x + data_player->render_distance;
+    int start_y = cam_chunk_y - data_player->render_distance;
+    int end_y = cam_chunk_y + data_player->render_distance;
+
+    if (start_x < 0) start_x = 0;
+    if (start_y < 0) start_y = 0;
+    if (end_x >= TOTAL_CHUNKS) end_x = TOTAL_CHUNKS - 1;
+    if (end_y >= TOTAL_CHUNKS) end_y = TOTAL_CHUNKS - 1;
+
+    for (int i = start_x; i <= end_x; i++) {
+        for (int j = start_y; j <= end_y; j++) {
             if (load_chunk(world_name, i, j, &world->data_chunks[i][j]) != 0) {
                 return 1;
             }

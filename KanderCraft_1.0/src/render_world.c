@@ -30,8 +30,8 @@ void init_model(Model *block_model, Textures_K *texture_data){
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera) {
 
-    int player_chunk_x = data_camera.position.x / MAX_SIZE;
-    int player_chunk_z = data_camera.position.z / MAX_SIZE;
+    int player_chunk_x = (int)floor(data_camera.position.x / CHUNK_WIDTH);
+    int player_chunk_z = (int)floor(data_camera.position.z / CHUNK_LENGTH);
 
     int START_X = player_chunk_x - data_player->render_distance;
     int END_X   = player_chunk_x + data_player->render_distance;
@@ -40,11 +40,11 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 
     if (START_X < 0) START_X = 0;
     if (START_Z < 0) START_Z = 0;
-    if (END_X > TOTAL_CHUNKS) END_X = TOTAL_CHUNKS;
-    if (END_Z > TOTAL_CHUNKS) END_Z = TOTAL_CHUNKS;
+    if (END_X >= TOTAL_CHUNKS) END_X = TOTAL_CHUNKS - 1;
+    if (END_Z >= TOTAL_CHUNKS) END_Z = TOTAL_CHUNKS - 1;
 
-    for (int cx = START_X; cx < END_X; cx++) {
-        for (int cz = START_Z; cz < END_Z; cz++) {
+    for (int cx = START_X; cx <= END_X; cx++) {
+        for (int cz = START_Z; cz <= END_Z; cz++) {
             for (int y = 0; y < CHUNK_DEPTH; y++) {
                 for (int x = 0; x < CHUNK_WIDTH; x++) {
                     for (int z = 0; z < CHUNK_LENGTH; z++) {

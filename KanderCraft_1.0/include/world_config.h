@@ -1,6 +1,6 @@
 #pragma once
 
-#define TOTAL_CHUNKS 2
+#define TOTAL_CHUNKS 10
 
 #define BLOCK_SITE_SIZE 0.1f
 

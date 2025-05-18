@@ -28,9 +28,8 @@ int main() {
 
     if(load_world_files(WORLD_NAME) == 1){
         create_world_files(WORLD_NAME);
-    } else{
-        load_world(&data_world, WORLD_NAME);
-    }
+    } 
+
     bool is_on = false;
     Block_orient sour;
     Vector5 Collision_data;
@@ -50,9 +49,8 @@ int main() {
     Vector3 cameralast;
     create_camera(&camera, &screenCenter, &cameralast);
     init_player(&data_player, &camera);
-
     while (!WindowShouldClose()) {
-        
+        load_world(&data_world, WORLD_NAME, &camera, &data_player);
         Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
