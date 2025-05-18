@@ -14,20 +14,27 @@
 
 typedef struct{
     Block ***data_blocks;
+    bool is_loaded;
 }Chunk;
 
 typedef struct{
     Chunk** data_chunks;
+    int last_chunk_x;
+    int last_chunk_z;
+    bool initialized;
 }World;
 
 Chunk** allocate_chunk();
 Block ***allocate_blocks();
 
+
+
 int copy_file(const char *source_path, const char *dest_path);
 int create_world_files(const char *world_name);
 int load_world_files(const char *world_name);
 int load_chunk(const char *world_name, int i, int j, Chunk *data);
-int load_world(World *world, const char *world_name, Camera *cam, Player_config *data_player);
+void init_world(World *world);
+int load_world(World *world, const char *world_name);
 int save_chunk(const char *world_name, int i, int j, Chunk *data);
 int save_world(World *world, const char *world_name);
 void free_blocks(Block ***blocks);

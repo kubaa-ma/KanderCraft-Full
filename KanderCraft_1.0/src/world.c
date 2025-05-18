@@ -146,65 +146,58 @@ int load_chunk(const char *world_name, int i, int j, Chunk *data){
 
 }
 
-int load_world(World *world, const char *world_name, Camera *cam, Player_config *data_player){
-    int cam_chunk_x = (int)(cam->position.z/ CHUNK_WIDTH);
-    int cam_chunk_y = (int)(cam->position.x / CHUNK_LENGTH);
+void init_world(World *world) {
+    for (int x = 0; x < TOTAL_CHUNKS; x++) {
+        for (int z = 0; z < TOTAL_CHUNKS; z++) {
+            world->data_chunks[x][z].is_loaded = false;
+        }
+    }
+    world->initialized = false;
+}
 
-    int start_x = cam_chunk_x - data_player->render_distance;
-    int end_x = cam_chunk_x + data_player->render_distance;
-    int start_y = cam_chunk_y - data_player->render_distance;
-    int end_y = cam_chunk_y + data_player->render_distance;
-
-    if (start_x < 0) start_x = 0;
-    if (start_y < 0) start_y = 0;
-    if (end_x >= TOTAL_CHUNKS) end_x = TOTAL_CHUNKS - 1;
-    if (end_y >= TOTAL_CHUNKS) end_y = TOTAL_CHUNKS - 1;
-
-    for (int i = start_x; i <= end_x; i++) {
-        for (int j = start_y; j <= end_y; j++) {
-            if (load_chunk(world_name, i, j, &world->data_chunks[i][j]) != 0) {
-                return 1;
+int load_world(World *world, const char *world_name) {
+    for (int x = 0; x < TOTAL_CHUNKS; x++) {
+        for (int z = 0; z < TOTAL_CHUNKS; z++) {
+            if (!world->data_chunks[x][z].is_loaded) {
+                if (load_chunk(world_name, x, z, &world->data_chunks[x][z]) != 0) {
+                    return 1;
+                }
+                world->data_chunks[x][z].is_loaded = true;
             }
         }
     }
+
+    world->initialized = true;
     return 0;
 }
 
+
 Block ***allocate_blocks() {
-    Block ***blocks = malloc(CHUNK_DEPTH * sizeof(Block **));
+    Block *raw_data = malloc(sizeof(Block) * CHUNK_DEPTH * CHUNK_WIDTH * CHUNK_LENGTH);
+    if (!raw_data) {
+        printf("Error allocating block data\n");
+        return NULL;
+    }
+
+    Block ***blocks = malloc(sizeof(Block **) * CHUNK_DEPTH);
     if (!blocks) {
-        printf("Error allocating block depth\n");
+        printf("Error allocating block pointers (z)\n");
+        free(raw_data);
         return NULL;
     }
 
     for (int z = 0; z < CHUNK_DEPTH; z++) {
-        blocks[z] = malloc(CHUNK_WIDTH * sizeof(Block *));
+        blocks[z] = malloc(sizeof(Block *) * CHUNK_WIDTH);
         if (!blocks[z]) {
-            printf("Error allocating block width at depth %d\n", z);
-            for (int i = 0; i < z; i++) {
-                for (int j = 0; j < CHUNK_WIDTH; j++) {
-                    free(blocks[i][j]);
-                }
-                free(blocks[i]);
-            }
+            printf("Error allocating block pointers (x) at z=%d\n", z);
+            for (int i = 0; i < z; i++) free(blocks[i]);
             free(blocks);
+            free(raw_data);
             return NULL;
         }
 
         for (int x = 0; x < CHUNK_WIDTH; x++) {
-            blocks[z][x] = malloc(CHUNK_LENGTH * sizeof(Block));
-            if (!blocks[z][x]) {
-                printf("Error allocating block length at depth %d, width %d\n", z, x);
-
-                for (int i = 0; i <= z; i++) {
-                    for (int j = 0; j < (i == z ? x : CHUNK_WIDTH); j++) {
-                        free(blocks[i][j]);
-                    }
-                    free(blocks[i]);
-                }
-                free(blocks);
-                return NULL;
-            }
+            blocks[z][x] = raw_data + (z * CHUNK_WIDTH * CHUNK_LENGTH) + (x * CHUNK_LENGTH);
         }
     }
 
@@ -212,13 +205,14 @@ Block ***allocate_blocks() {
 }
 
 void free_blocks(Block ***blocks) {
+    if (!blocks) return;
+
+    Block *raw_data = blocks[0][0];
     for (int z = 0; z < CHUNK_DEPTH; z++) {
-        for (int x = 0; x < CHUNK_WIDTH; x++) {
-            free(blocks[z][x]);
-        }
         free(blocks[z]);
     }
     free(blocks);
+    free(raw_data);
 }
 
 Chunk** allocate_chunk() {

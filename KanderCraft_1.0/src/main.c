@@ -18,17 +18,19 @@ int main() {
 
     World data_world;
     data_world.data_chunks = allocate_chunk();
-
+    init_world(&data_world);
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world.data_chunks[i][j].data_blocks = allocate_blocks();
-            world_generator(&data_world, &data_player);
+                world_generator(&data_world, &data_player);
         }
     }
 
     if(load_world_files(WORLD_NAME) == 1){
         create_world_files(WORLD_NAME);
-    } 
+    } else{
+        load_world(&data_world, WORLD_NAME);
+    }
 
     bool is_on = false;
     Block_orient sour;
@@ -50,7 +52,7 @@ int main() {
     create_camera(&camera, &screenCenter, &cameralast);
     init_player(&data_player, &camera);
     while (!WindowShouldClose()) {
-        load_world(&data_world, WORLD_NAME, &camera, &data_player);
+
         Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
         BeginDrawing();
