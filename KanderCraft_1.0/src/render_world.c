@@ -26,7 +26,6 @@ void init_model(Model *block_model, Textures_K *texture_data){
     
     block_model->materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->dirt;
     
-    //UnloadMesh(plane_mesh);
 }
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera) {
@@ -67,16 +66,16 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 
 
                             if (block.visible_faces & FACE_RIGHT) {
-                                DrawModelEx(*block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, WHITE);
+                                DrawModelEx(*block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, LIGHTGRAY);
                             }
                             if (block.visible_faces & FACE_LEFT) {
-                                DrawModelEx(*block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, WHITE);
+                                DrawModelEx(*block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY);
                             }
                             if (block.visible_faces & FACE_TOP) {
                                 DrawModelEx(*block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE);
                             }
                             if (block.visible_faces & FACE_BOTTOM) {
-                                DrawModelEx(*block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, WHITE);
+                                DrawModelEx(*block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY);
                             }
                             if (block.visible_faces & FACE_BACK) {
                                 DrawModelEx(*block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE);

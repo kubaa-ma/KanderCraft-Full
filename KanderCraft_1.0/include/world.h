@@ -15,12 +15,12 @@
 typedef struct{
     Block ***data_blocks;
     bool is_loaded;
+    int x;
+    int z;
 }Chunk;
 
 typedef struct{
     Chunk** data_chunks;
-    int last_chunk_x;
-    int last_chunk_z;
     bool initialized;
 }World;
 

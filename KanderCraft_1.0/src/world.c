@@ -265,6 +265,8 @@ void destroy_world(World *data_world, const Player_config *data){
 void world_generator(World *data_world, Player_config *data) {
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
+            data_world->data_chunks[i][j].x = i;
+            data_world->data_chunks[i][j].z = j;
             Block ***blocks = data_world->data_chunks[i][j].data_blocks;
             for (int k = 0; k < CHUNK_DEPTH; k++) {
                 for (int l = 0; l < CHUNK_WIDTH; l++) {
@@ -277,23 +279,23 @@ void world_generator(World *data_world, Player_config *data) {
 
                         }
 
-                    if (i == 0 && l == 0) {
-                        blocks[k][l][m].type = BLOCK_AIR;
-                    }
-                    if (j == 0 && m == 0) {
-                        blocks[k][l][m].type = BLOCK_AIR;
-                    }
-                    if (k == 0) {
-                        blocks[k][l][m].type = BLOCK_AIR;
-                    }
+                        if (i == 0 && l == 0) {
+                            blocks[k][l][m].type = BLOCK_AIR;
+                        }
+                        if (j == 0 && m == 0) {
+                            blocks[k][l][m].type = BLOCK_AIR;
+                        }
+                        if (k == 0) {
+                            blocks[k][l][m].type = BLOCK_AIR;
+                        }
 
-                
-                    if (i == TOTAL_CHUNKS - 1 && l == CHUNK_WIDTH - 1) {
-                        blocks[k][l][m].type = BLOCK_AIR;
-                    }
-                    if (j == TOTAL_CHUNKS - 1 && m == CHUNK_LENGTH - 1) {
-                        blocks[k][l][m].type = BLOCK_AIR;
-                    }
+                    
+                        if (i == TOTAL_CHUNKS - 1 && l == CHUNK_WIDTH - 1) {
+                            blocks[k][l][m].type = BLOCK_AIR;
+                        }
+                        if (j == TOTAL_CHUNKS - 1 && m == CHUNK_LENGTH - 1) {
+                            blocks[k][l][m].type = BLOCK_AIR;
+                        }
 
                         if (blocks[k][l][m].type != BLOCK_AIR) {
                             blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
@@ -306,6 +308,8 @@ void world_generator(World *data_world, Player_config *data) {
                                 blocks[k][l][m].features = 0;
                                 blocks[k][l][m].visible_faces = 0;
                         }
+
+
                     }
                 }
             }
