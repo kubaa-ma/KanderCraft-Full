@@ -278,7 +278,10 @@ void world_generator(World *data_world, Player_config *data) {
                             blocks[k][l][m].type = BLOCK_AIR;
 
                         }
+                        if(k == 50 && k < CHUNK_DEPTH){
+                            blocks[k][l][m].type = BLOCK_GRASS;
 
+                        }
                         if (i == 0 && l == 0) {
                             blocks[k][l][m].type = BLOCK_AIR;
                         }

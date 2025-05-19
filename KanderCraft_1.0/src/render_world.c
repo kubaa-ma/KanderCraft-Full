@@ -9,6 +9,12 @@ void init_textures(Textures_K *data) {
     data->dirt = LoadTexture("assets/dirt.png");
     data->cursor = LoadTexture("assets/cursor.png");
     data->standrat_font = LoadFont("assets/minecraft_font.ttf");
+    data->grass[0] = LoadTexture("assets/grass/grass_bottom.png");
+    data->grass[1] = LoadTexture("assets/grass/grass_side_back.png");
+    data->grass[2] = LoadTexture("assets/grass/grass_side_front.png");
+    data->grass[3] = LoadTexture("assets/grass/grass_side_left.png");
+    data->grass[4] = LoadTexture("assets/grass/grass_side_right.png");
+    data->grass[5] = LoadTexture("assets/grass/grass_top.png");
 
 }
 
@@ -16,16 +22,28 @@ void unload_textures(Textures_K *data) {
     UnloadTexture(data->dirt);
     UnloadTexture(data->cursor);
     UnloadFont(data->standrat_font);
+    for(int i = 0; i < CUBE_SIDES; i ++){
+        UnloadTexture(data->grass[i]);
+    }
 }
 
-void init_model(Model *block_model, Textures_K *texture_data){
-    Mesh plane_mesh = GenMeshPlane(10.0f, 10.0f, 1, 1);
+void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
+    int i;
 
-    *block_model = LoadModelFromMesh(plane_mesh);
-    
-    
-    block_model->materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->dirt;
-    
+    for (i = 0; i < CUBE_SIDES; i++) {
+        Mesh face = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(face);
+
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->grass[i];
+    }
+
+    if (i < TEXTURES_AMOUNT) {
+        Mesh dirt_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(dirt_face);
+
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->dirt;
+        i++;
+    }
 }
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera) {
@@ -66,30 +84,76 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 
 
                             if (block.visible_faces & FACE_RIGHT) {
-                                DrawModelEx(*block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, LIGHTGRAY);
+                                draw_IT(block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, LIGHTGRAY, block.type);
                             }
                             if (block.visible_faces & FACE_LEFT) {
-                                DrawModelEx(*block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY);
+                                draw_IT(block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY, block.type);
                             }
                             if (block.visible_faces & FACE_TOP) {
-                                DrawModelEx(*block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE);
+                                draw_IT(block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE, block.type);
                             }
                             if (block.visible_faces & FACE_BOTTOM) {
-                                DrawModelEx(*block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY);
+                                draw_IT(block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY, block.type);
                             }
                             if (block.visible_faces & FACE_BACK) {
-                                DrawModelEx(*block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE);
+                                draw_IT(block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE, block.type);
                             }
                             if (block.visible_faces & FACE_FRONT) {
-                                DrawModelEx(*block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE);
+                                draw_IT(block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE, block.type);
                             }
 
-                            //DrawBoundingBox(block.box, WHITE);
+                            // DrawBoundingBox(block.box, WHITE);
                         }
                     }
                 }
             }
         }
+    }
+}
+bool Vector3EqualsK(Vector3 a, Vector3 b) {
+
+    const float EPSILON =  0.0001f;
+
+    return (fabsf(a.x - b.x) < EPSILON &&
+            fabsf(a.y - b.y) < EPSILON &&
+            fabsf(a.z - b.z) < EPSILON);
+}
+
+
+bool FloatEqualsK(float a, float b) {
+    const float EPSILON = 0.0001f;
+    return fabsf(a - b) < EPSILON;
+}
+
+void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type) {
+    switch (type) {
+        case BLOCK_GRASS:
+            if (Vector3EqualsK(rotationAxis, ROT_RIGHT_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_RIGHT)) {
+                DrawModelEx(models[4], position, rotationAxis, rotationAngle, blockScale, tint);
+            }
+            else if (Vector3EqualsK(rotationAxis, ROT_LEFT_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_LEFT)) {
+                DrawModelEx(models[3], position, rotationAxis, ROT_ANGLE_LEFT, blockScale, tint);
+            }
+            else if (Vector3EqualsK(rotationAxis, ROT_TOP_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_TOP)) {
+                DrawModelEx(models[5], position, rotationAxis, rotationAngle, blockScale, tint);
+            }
+            else if (Vector3EqualsK(rotationAxis, ROT_BOTTOM_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_BOTTOM)) {
+                DrawModelEx(models[0], position, rotationAxis, rotationAngle, blockScale, tint);
+            }
+            else if (Vector3EqualsK(rotationAxis, ROT_FRONT_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_FRONT)) {
+                DrawModelEx(models[1], position, rotationAxis, rotationAngle, blockScale, tint);
+            }
+            else if (Vector3EqualsK(rotationAxis, ROT_BACK_SITE) && FloatEqualsK(rotationAngle, ROT_ANGLE_BACK)) {
+                DrawModelEx(models[2], position, rotationAxis, rotationAngle, blockScale, tint);
+            }
+            break;
+
+        case BLOCK_DIRT:
+            DrawModelEx(models[6], position, rotationAxis, rotationAngle, blockScale, tint);
+            break;
+
+        default:
+            break;
     }
 }
 

@@ -30,7 +30,8 @@ typedef uint8_t B_features;
 
 typedef enum {
     BLOCK_AIR,
-    BLOCK_DIRT
+    BLOCK_DIRT,
+    BLOCK_GRASS
 }Blocktype;
 
 typedef struct {

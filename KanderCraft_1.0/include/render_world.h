@@ -9,6 +9,7 @@
 #define SCREEN_HEIGHT 1080
 
 #define CUBE_SIDES 6
+#define TEXTURES_AMOUNT 128
 
 typedef struct {
     Texture2D dirt;
@@ -24,7 +25,7 @@ void init_textures(Textures_K *data);
 
 void unload_textures(Textures_K *data);
 
-void init_model(Model *block_model, Textures_K *texture_data);
+void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data);
 
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera);
 
@@ -37,6 +38,9 @@ Vector5 detectCollision(Camera camera, World *data_world);
 
 Vector3 GetHitNormal(Ray ray, BoundingBox box);
 
+
+void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
+bool Vector3EqualsK(Vector3 a, Vector3 b);
 void Game_input(Vector5 Collision_data, World *data_world, Camera camera);
 void prepeare_block_ori(Block_orient *sour);
 #endif

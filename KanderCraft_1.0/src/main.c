@@ -22,16 +22,16 @@ int main() {
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world.data_chunks[i][j].data_blocks = allocate_blocks();
+            world_generator(&data_world, &data_player);
         }
     }
     
-    world_generator(&data_world, &data_player);
 
     if(load_world_files(WORLD_NAME) == 1){
         create_world_files(WORLD_NAME);
-    } else{
-        load_world(&data_world, WORLD_NAME);
-    }
+    } 
+    
+    load_world(&data_world, WORLD_NAME);
 
     bool is_on = false;
     Block_orient sour;
@@ -44,8 +44,8 @@ int main() {
     Textures_K textures;
     init_textures(&textures);
 
-    Model block_model;
-    init_model(&block_model, &textures);
+    Model block_model[TEXTURES_AMOUNT];
+    init_models(block_model, &textures);
 
     Camera camera = { 0 };
     Vector2 screenCenter;
@@ -60,7 +60,7 @@ int main() {
         ClearBackground(SKYBLUE);
         BeginMode3D(camera);
 
-        draw_blocks(&data_world, &data_player, &block_model, &sour, camera);
+        draw_blocks(&data_world, &data_player, block_model, &sour, camera);
 
         if(IsKeyUp(KEY_L)){
             Collision_data = detectCollision(camera, &data_world);
@@ -88,7 +88,9 @@ int main() {
         }
     }
 
-    UnloadModel(block_model);
+    for(int i = 0; i < TEXTURES_AMOUNT; i++){
+        UnloadModel(block_model[i]);
+    }
     destroy_world(&data_world, &data_player);
     unload_textures(&textures);
     CloseWindow();
