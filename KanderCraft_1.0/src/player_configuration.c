@@ -33,9 +33,9 @@ void side_info(Font standart, Camera camera, Vector5 CollisionData){
         char side_Info[512];
         float frameTime = GetFrameTime();
         int fps_state = GetFPS();
-        sprintf(side_Info, "KanderCraft unreleased version\nMade by Kander\nFPS: %d\nFrame time - %f\nXYZ: %d / %d / %d\nTarget XYZ: %d / %d/ %d\nCamera Fovy (Key: j,n): %f (54.0 normal)\nCollision At chunk XZ: %d | %d Blok XYZ: %d | %d | %d", fps_state, frameTime,
+        sprintf(side_Info, "KanderCraft unreleased version\nMade by Kander\nFPS: %d\nFrame time - %f\nXYZ: %d / %d / %d\nTarget XYZ: %d / %d/ %d\nCamera Fovy (Key: j,n): %f (54.0 normal)\nCollision At chunk XZ: %d | %d Blok XYZ: %d | %d | %d, At chunk XZ: %d / %d", fps_state, frameTime,
             (int)camera.position.x ,(int)camera.position.y, (int)camera.position.z, 
-            (int)camera.target.x, (int)camera.target.y, (int)camera.target.z, camera.fovy, CollisionData.cx, CollisionData.cz, CollisionData.x, CollisionData.y, CollisionData.z);
+            (int)camera.target.x, (int)camera.target.y, (int)camera.target.z, camera.fovy, CollisionData.cx, CollisionData.cz, CollisionData.x, CollisionData.y, CollisionData.z, camera.position.x / CHUNK_WIDTH, camera.position.z /CHUNK_LENGTH);
         DrawTextPro(standart, side_Info, (Vector2){10, 10}, (Vector2){0,0}, 0, 18, 1.0f, WHITE);
 
 }

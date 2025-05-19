@@ -22,9 +22,10 @@ int main() {
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world.data_chunks[i][j].data_blocks = allocate_blocks();
-                world_generator(&data_world, &data_player);
         }
     }
+    
+    world_generator(&data_world, &data_player);
 
     if(load_world_files(WORLD_NAME) == 1){
         create_world_files(WORLD_NAME);

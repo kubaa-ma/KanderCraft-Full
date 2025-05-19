@@ -15,6 +15,7 @@ void init_textures(Textures_K *data) {
 void unload_textures(Textures_K *data) {
     UnloadTexture(data->dirt);
     UnloadTexture(data->cursor);
+    UnloadFont(data->standrat_font);
 }
 
 void init_model(Model *block_model, Textures_K *texture_data){
