@@ -3,7 +3,24 @@
 #include "../include/render_world.h"
 #include "../include/block.h"
 
+void init_sounds(SoundsK *data){
+    data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
+    data->place_loose_block = LoadSound("assets/sounds/place_loose.wav");
 
+
+
+    data->music3 = LoadMusicStream("assets/sounds/calm3.wav");
+    // Music track used: calm3.wav
+    // Original soundtrack from Minecraft by C418
+    // This file is used for educational/non-commercial purposes only.
+    // All rights to the original composition belong to its respective author and publisher.
+}
+
+void unload_sounds(SoundsK *data){
+    UnloadSound(data->destroy_loose_block);
+    UnloadSound(data->place_loose_block);
+    UnloadMusicStream(data->music3);
+}
 
 void init_textures(Textures_K *data) {
     data->dirt = LoadTexture("assets/dirt.png");
@@ -238,7 +255,7 @@ Vector5 detectCollision(Camera camera, World *data_world) {
     return datas;
 }
 
-void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
+void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds) {
     int c_distance_x = 0;
     int c_distance_z = 0;
     c_distance_z = Collision_data.cx * CHUNK_WIDTH;
@@ -249,6 +266,7 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_AIR) {
+            PlaySound(sounds->destroy_loose_block);
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type = BLOCK_AIR;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].features = 0b00000000;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.min = (Vector3){999,999,999};
@@ -265,7 +283,7 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera) {
             int newX = Collision_data.x + (int)normal.x;
             int newY = Collision_data.y + (int)normal.y;
             int newZ = Collision_data.z + (int)normal.z;
-
+            PlaySound(sounds->place_loose_block);
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.min = (Vector3){newX + c_distance_z, newY, newZ + c_distance_x};

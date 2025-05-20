@@ -18,10 +18,18 @@ typedef struct {
     Font standrat_font;
 } Textures_K;
 
-
+typedef struct{
+    Music music3;
+    Sound destroy_loose_block;
+    Sound place_loose_block;
+}SoundsK;
 
 
 void init_textures(Textures_K *data);
+
+void init_sounds(SoundsK *data);
+
+void unload_sounds(SoundsK *data);
 
 void unload_textures(Textures_K *data);
 
@@ -41,6 +49,6 @@ Vector3 GetHitNormal(Ray ray, BoundingBox box);
 
 void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
 bool Vector3EqualsK(Vector3 a, Vector3 b);
-void Game_input(Vector5 Collision_data, World *data_world, Camera camera);
+void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds);
 void prepeare_block_ori(Block_orient *sour);
 #endif

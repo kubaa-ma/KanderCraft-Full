@@ -38,6 +38,9 @@ int main() {
     Vector5 Collision_data;
     prepeare_block_ori(&sour);
 
+    InitAudioDevice();
+    SoundsK data_sounds;
+    init_sounds(&data_sounds);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "KanderCraft 1.0");
     ToggleBorderlessWindowed();
@@ -54,8 +57,14 @@ int main() {
     init_player(&data_player, &camera);
     while (!WindowShouldClose()) {
 
+
         Centering_cursor();
         UpdateCamera(&camera, CAMERA_FREE);
+        UpdateMusicStream(data_sounds.music3);
+
+        if (!IsMusicStreamPlaying(data_sounds.music3)) {
+            PlayMusicStream(data_sounds.music3);
+        }
         BeginDrawing();
         ClearBackground(SKYBLUE);
         BeginMode3D(camera);
@@ -66,8 +75,7 @@ int main() {
             Collision_data = detectCollision(camera, &data_world);
         }
         EndMode3D();
-        Game_input(Collision_data, &data_world, camera);
-        
+        Game_input(Collision_data, &data_world, camera, &data_sounds);
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data);
         if(IsKeyUp(KEY_L)){
             DrawTexture(textures.cursor, 0,0, WHITE);
@@ -91,6 +99,10 @@ int main() {
     for(int i = 0; i < TEXTURES_AMOUNT; i++){
         UnloadModel(block_model[i]);
     }
+
+    unload_sounds(&data_sounds);
+    CloseAudioDevice();
+
     destroy_world(&data_world, &data_player);
     unload_textures(&textures);
     CloseWindow();
