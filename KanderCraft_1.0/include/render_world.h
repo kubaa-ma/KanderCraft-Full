@@ -42,7 +42,7 @@ Vector3 NormalizeVector(Vector3 v);
 
 bool CheckRayCollisionWithBlock(Ray ray, World *data_world, int cx, int cz, int y, int x, int z);
 
-Vector5 detectCollision(Camera camera, World *data_world);
+Vector5 detectCollision(Camera camera, World *data_world,  bool use_test_camera);
 
 Vector3 GetHitNormal(Ray ray, BoundingBox box);
 

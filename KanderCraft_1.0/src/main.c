@@ -34,6 +34,7 @@ int main() {
     load_world(&data_world, WORLD_NAME);
 
     bool is_on = false;
+    bool use_test_camera = false;
     Block_orient sour;
     Vector5 Collision_data;
     prepeare_block_ori(&sour);
@@ -55,11 +56,17 @@ int main() {
     Vector3 cameralast;
     create_camera(&camera, &screenCenter, &cameralast);
     init_player(&data_player, &camera);
+
+    Camera test_camera = { 0 };
+    create_camera(&test_camera, &screenCenter, &cameralast);
+    init_player(&data_player, &test_camera);
+
     while (!WindowShouldClose()) {
 
-
+        if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
+        
         Centering_cursor();
-        UpdateCamera(&camera, CAMERA_FREE);
+        UpdateCamera(use_test_camera? &test_camera : &camera, CAMERA_FREE);
         UpdateMusicStream(data_sounds.music3);
 
         if (!IsMusicStreamPlaying(data_sounds.music3)) {
@@ -67,16 +74,17 @@ int main() {
         }
         BeginDrawing();
         ClearBackground(SKYBLUE);
-        BeginMode3D(camera);
+        BeginMode3D(use_test_camera? test_camera : camera);
 
         draw_blocks(&data_world, &data_player, block_model, &sour, camera);
 
         if(IsKeyUp(KEY_L)){
-            Collision_data = detectCollision(camera, &data_world);
+            Collision_data = detectCollision(camera, &data_world, use_test_camera);
         }
         EndMode3D();
         Game_input(Collision_data, &data_world, camera, &data_sounds);
-        game_settings(&is_on, textures.standrat_font, &camera, Collision_data);
+        game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
+        
         if(IsKeyUp(KEY_L)){
             DrawTexture(textures.cursor, 0,0, WHITE);
         }

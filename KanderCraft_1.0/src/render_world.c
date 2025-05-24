@@ -216,14 +216,16 @@ Vector3 GetHitNormal(Ray ray, BoundingBox box) {
 }
 
 
-Vector5 detectCollision(Camera camera, World *data_world) {
+Vector5 detectCollision(Camera camera, World *data_world, bool use_test_camera) {
     Vector5 datas = { -1, -1, -1, -1, -1 };
 
     Vector3 camDir = {camera.target.x - camera.position.x, camera.target.y - camera.position.y, camera.target.z - camera.position.z};
     camDir = NormalizeVector(camDir);
 
     Ray ray = { camera.position, camDir };
-    //DrawRay(ray, BLUE);
+    if(use_test_camera){
+        DrawRay(ray, BLUE);
+    }
 
     float minDistance = FLT_MAX;
 
