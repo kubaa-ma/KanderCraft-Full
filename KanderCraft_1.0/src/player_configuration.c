@@ -34,9 +34,7 @@ void side_info(Font standart, Camera camera, Vector5 CollisionData, bool *use_te
         float frameTime = GetFrameTime();
         int fps_state = GetFPS();\
 
-        if(*use_test_camera){
-            DrawTextPro(standart, "!DEBUG CAMERA! (switch [U])", (Vector2){800, 10}, (Vector2){0,0}, 0, 42, 1.0f, WHITE);
-        }
+
 
         sprintf(side_Info, "KanderCraft unreleased version\nMade by Kander\nFPS: %d\nFrame time - %f\nXYZ: %d / %d / %d\nTarget XYZ: %d / %d/ %d\nCamera Fovy (Key: j,n): %f (54.0 normal)\nCollision At chunk XZ: %d | %d Blok XYZ: %d | %d | %d\nAt chunk XZ: %d / %d\nDebugging camera switch by pressing [U]", fps_state, frameTime,
             (int)camera.position.x ,(int)camera.position.y, (int)camera.position.z, 
@@ -48,6 +46,9 @@ void side_info(Font standart, Camera camera, Vector5 CollisionData, bool *use_te
 void game_settings(bool *is_on, Font standart, Camera *camera, Vector5 CollisionData, bool *use_test_camera){
     if (IsKeyPressed(KEY_F11)) {
         ToggleBorderlessWindowed();
+    }
+    if(*use_test_camera){
+        DrawTextPro(standart, "!DEBUG CAMERA! (switch [U])", (Vector2){800, 10}, (Vector2){0,0}, 0, 42, 1.0f, WHITE);
     }
     if (IsKeyPressed(KEY_F3)){
         *is_on = !*is_on;
