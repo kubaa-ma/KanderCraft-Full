@@ -107,10 +107,14 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                                 draw_IT(block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY, block.type);
                             }
                             if (block.visible_faces & FACE_TOP) {
-                                draw_IT(block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE, block.type);
+                                if(data_camera.position.y > y){
+                                    draw_IT(block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE, block.type);
+                                }
                             }
                             if (block.visible_faces & FACE_BOTTOM) {
-                                draw_IT(block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY, block.type);
+                                if(data_camera.position.y < y){
+                                    draw_IT(block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY, block.type);
+                                }
                             }
                             if (block.visible_faces & FACE_BACK) {
                                 draw_IT(block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE, block.type);
