@@ -48,7 +48,7 @@ void game_settings(bool *is_on, Font standart, Camera *camera, Vector5 Collision
         ToggleBorderlessWindowed();
     }
     if(*use_test_camera){
-        DrawTextPro(standart, "!DEBUG CAMERA! (switch [U])", (Vector2){800, 10}, (Vector2){0,0}, 0, 42, 1.0f, WHITE);
+        DrawTextPro(standart, "!DEBUG CAMERA! (switch [U])\n Collision blocks (hold [H])", (Vector2){800, 10}, (Vector2){0,0}, 0, 42, 1.0f, WHITE);
     }
     if (IsKeyPressed(KEY_F3)){
         *is_on = !*is_on;

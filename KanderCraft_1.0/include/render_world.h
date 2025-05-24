@@ -35,7 +35,7 @@ void unload_textures(Textures_K *data);
 
 void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data);
 
-void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera);
+void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera, bool use_debbug_camera);
 
 
 Vector3 NormalizeVector(Vector3 v);

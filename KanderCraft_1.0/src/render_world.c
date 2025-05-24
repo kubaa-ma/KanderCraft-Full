@@ -63,7 +63,7 @@ void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
     }
 }
 
-void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera) {
+void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera, bool use_debbug_camera) {
 
     int player_chunk_x = (int)floor(data_camera.position.x / CHUNK_WIDTH);
     int player_chunk_z = (int)floor(data_camera.position.z / CHUNK_LENGTH);
@@ -123,7 +123,7 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
                                 draw_IT(block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE, block.type);
                             }
 
-                            // DrawBoundingBox(block.box, WHITE);
+                            if(IsKeyDown(KEY_H) && use_debbug_camera) DrawBoundingBox(block.box, WHITE);
                         }
                     }
                 }

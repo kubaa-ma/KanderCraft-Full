@@ -76,7 +76,7 @@ int main() {
         ClearBackground(SKYBLUE);
         BeginMode3D(use_test_camera? test_camera : camera);
 
-        draw_blocks(&data_world, &data_player, block_model, &sour, camera);
+        draw_blocks(&data_world, &data_player, block_model, &sour, camera, use_test_camera);
 
         if(IsKeyUp(KEY_L)){
             Collision_data = detectCollision(camera, &data_world, use_test_camera);
