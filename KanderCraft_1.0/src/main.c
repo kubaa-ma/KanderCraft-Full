@@ -91,7 +91,7 @@ int main() {
         EndMode3D();
 
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
-        DrawTexture(textures.cursor, 0,0, WHITE);
+        if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
 
         Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
