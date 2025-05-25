@@ -6,15 +6,14 @@
 #include "../include/config.h"
 #include "../include/block.h"
 
-#define WORLD_NAME "World1"
+#define WORLD_NAME "Test_world"
 
 int main() {
 
     Player_config data_player;
 
-    if (load_config(&data_player)) {
-        create_config(&data_player);
-    }
+    if (load_config(&data_player)) create_config(&data_player);
+    
 
     World data_world;
     data_world.data_chunks = allocate_chunk();
@@ -27,9 +26,7 @@ int main() {
     }
     
 
-    if(load_world_files(WORLD_NAME) == 1){
-        create_world_files(WORLD_NAME);
-    } 
+    if(load_world_files(WORLD_NAME) == 1) create_world_files(WORLD_NAME);
     
     load_world(&data_world, WORLD_NAME);
 
@@ -74,21 +71,17 @@ int main() {
         }
         BeginDrawing();
         ClearBackground(SKYBLUE);
+
         BeginMode3D(use_test_camera? test_camera : camera);
-
         draw_blocks(&data_world, &data_player, block_model, &sour, camera, use_test_camera);
-
-        if(IsKeyUp(KEY_L)){
-            Collision_data = detectCollision(camera, &data_world, use_test_camera);
-        }
+        if(IsKeyUp(KEY_L))Collision_data = detectCollision(camera, &data_world, use_test_camera);
         EndMode3D();
-        Game_input(Collision_data, &data_world, camera, &data_sounds);
+
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
-        
-        if(IsKeyUp(KEY_L)){
-            DrawTexture(textures.cursor, 0,0, WHITE);
-        }
+        DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
+
+        Game_input(Collision_data, &data_world, camera, &data_sounds);
         settle_blocks(&data_world);
 
     }

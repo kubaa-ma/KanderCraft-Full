@@ -73,7 +73,7 @@ int load_world_files(const char *world_name) {
 
     src = fopen(world_path, "rb");
     if (src == NULL) {
-        perror("Error opening icon");
+        printf("Creating new world");
         return 1;
     }
     
