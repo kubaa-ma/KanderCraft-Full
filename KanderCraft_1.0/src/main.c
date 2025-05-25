@@ -42,6 +42,7 @@ int main() {
     
     load_world(&data_world, WORLD_NAME);
 
+    int block_place = 0;
     bool is_on = false;
     bool use_test_camera = false;
     Block_orient sour;
@@ -93,8 +94,15 @@ int main() {
         DrawTexture(textures.cursor, 0,0, WHITE);
         EndDrawing();
 
-        Game_input(Collision_data, &data_world, camera, &data_sounds);
+        Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
         settle_blocks(&data_world);
+        if(GetMouseWheelMove()){
+            if(block_place == 0){
+                block_place = 1;
+            } else if (block_place == 1){
+                block_place = 0;
+            }
+        }
 
     }
 

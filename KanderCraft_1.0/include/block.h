@@ -40,10 +40,14 @@
 typedef uint8_t VisibleFaces;
 typedef uint8_t B_features;
 
+#define PLAYER_POSIBLE_PLACE_BLOCKS 2
+
+
 typedef enum {
     BLOCK_AIR,
     BLOCK_DIRT,
-    BLOCK_GRASS
+    BLOCK_GRASS,
+    BLOCK_STONE,
 }Blocktype;
 
 typedef struct {

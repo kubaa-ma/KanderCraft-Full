@@ -28,12 +28,14 @@ typedef struct {
     Texture2D grass[CUBE_SIDES];
     Texture2D cursor;
     Font standrat_font;
+    Texture2D cobblestone;
 } Textures_K;
 
 typedef struct{
     Music music3;
     Sound destroy_loose_block;
     Sound place_loose_block;
+    Sound place_stone_block;
 }SoundsK;
 
 
@@ -61,6 +63,6 @@ Vector3 GetHitNormal(Ray ray, BoundingBox box);
 
 void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
 bool Vector3EqualsK(Vector3 a, Vector3 b);
-void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds);
+void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds, int block_place);
 void prepeare_block_ori(Block_orient *sour);
 #endif

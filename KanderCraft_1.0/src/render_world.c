@@ -18,7 +18,7 @@
 void init_sounds(SoundsK *data){
     data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
     data->place_loose_block = LoadSound("assets/sounds/place_loose.wav");
-
+    data->place_stone_block = LoadSound("assets/sounds/place_stone.wav");
 
 
     data->music3 = LoadMusicStream("assets/sounds/calm3.wav");
@@ -32,6 +32,7 @@ void unload_sounds(SoundsK *data){
     UnloadSound(data->destroy_loose_block);
     UnloadSound(data->place_loose_block);
     UnloadMusicStream(data->music3);
+    UnloadSound(data->place_stone_block);
 }
 
 void init_textures(Textures_K *data) {
@@ -44,6 +45,7 @@ void init_textures(Textures_K *data) {
     data->grass[3] = LoadTexture("assets/grass/grass_side_left.png");
     data->grass[4] = LoadTexture("assets/grass/grass_side_right.png");
     data->grass[5] = LoadTexture("assets/grass/grass_top.png");
+    data->cobblestone = LoadTexture("assets/default_cobble.png");
 
 }
 
@@ -51,6 +53,7 @@ void unload_textures(Textures_K *data) {
     UnloadTexture(data->dirt);
     UnloadTexture(data->cursor);
     UnloadFont(data->standrat_font);
+    UnloadTexture(data->cobblestone);
     for(int i = 0; i < CUBE_SIDES; i ++){
         UnloadTexture(data->grass[i]);
     }
@@ -71,6 +74,11 @@ void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
         models[i] = LoadModelFromMesh(dirt_face);
 
         models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->dirt;
+        i++;
+
+        Mesh stone_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(dirt_face);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->cobblestone;
         i++;
     }
 }
@@ -184,6 +192,9 @@ void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotati
         case BLOCK_DIRT:
             DrawModelEx(models[6], position, rotationAxis, rotationAngle, blockScale, tint);
             break;
+        case BLOCK_STONE:
+            DrawModelEx(models[7], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
 
         default:
             break;
@@ -273,7 +284,7 @@ Vector5 detectCollision(Camera camera, World *data_world, bool use_test_camera) 
     return datas;
 }
 
-void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds) {
+void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds, int block_place) {
     int c_distance_x = 0;
     int c_distance_z = 0;
     c_distance_z = Collision_data.cx * CHUNK_WIDTH;
@@ -284,7 +295,9 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera, Sounds
 
         if (IsMouseButtonPressed(MOUSE_BUTTON_LEFT) &&
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_AIR) {
-            PlaySound(sounds->destroy_loose_block);
+            
+            if(data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type != BLOCK_STONE) PlaySound(sounds->destroy_loose_block);
+            else if(data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type == BLOCK_STONE) PlaySound(sounds->place_stone_block);
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].type = BLOCK_AIR;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].features = 0b00000000;
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[Collision_data.y][Collision_data.x][Collision_data.z].box.min = (Vector3){999,999,999};
@@ -301,9 +314,16 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera, Sounds
             int newX = Collision_data.x + (int)normal.x;
             int newY = Collision_data.y + (int)normal.y;
             int newZ = Collision_data.z + (int)normal.z;
-            PlaySound(sounds->place_loose_block);
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
-            data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+
+            if(block_place == 0){
+                PlaySound(sounds->place_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 1){
+                PlaySound(sounds->place_stone_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_STONE;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            }
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.min = (Vector3){newX + c_distance_z, newY, newZ + c_distance_x};
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.max = (Vector3){newX + 1.0f + c_distance_z, newY + 1.0f, newZ + 1.0f + c_distance_x};
         }
