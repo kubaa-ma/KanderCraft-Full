@@ -1,6 +1,17 @@
 #ifndef WORLD_H
 #define WORLD_H
 
+/***************************************************************
+ *  Project:       KanderCraft
+ *  Author:        Jakub Jansa
+ *  License:       BSD 2-Clause License
+ *
+ *  Copyright (c) 2025, Jakub Jansa
+ *  All rights reserved.
+ *
+ *  This file is part of a free software project and is licensed
+ *  under the BSD 2-Clause License. See LICENSE file for details.
+ ***************************************************************/
 
 
 #include "raylib.h"

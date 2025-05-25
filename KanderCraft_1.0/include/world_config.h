@@ -1,5 +1,17 @@
 #pragma once
 
+/***************************************************************
+ *  Project:       KanderCraft
+ *  Author:        Jakub Jansa
+ *  License:       BSD 2-Clause License
+ *
+ *  Copyright (c) 2025, Jakub Jansa
+ *  All rights reserved.
+ *
+ *  This file is part of a free software project and is licensed
+ *  under the BSD 2-Clause License. See LICENSE file for details.
+ ***************************************************************/
+
 #define TOTAL_CHUNKS 2
 
 #define BLOCK_SITE_SIZE 0.1f
