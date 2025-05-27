@@ -60,6 +60,8 @@ int main() {
 
     Model block_model[TEXTURES_AMOUNT];
     init_models(block_model, &textures);
+    int screenWidth = (GetScreenWidth() / 2) - 12;
+    int screenHeight = (GetScreenHeight() / 2) - 12;
 
     Camera camera = { 0 };
     Vector2 screenCenter;
@@ -91,7 +93,7 @@ int main() {
         EndMode3D();
 
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
-        if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, 0,0, WHITE);
+        if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, screenWidth, screenHeight, WHITE);
         EndDrawing();
 
         Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
