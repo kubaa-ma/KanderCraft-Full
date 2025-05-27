@@ -28,6 +28,7 @@ typedef struct{
     bool is_loaded;
     int x;
     int z;
+    BoundingBox bounds;
 }Chunk;
 
 typedef struct{
@@ -52,6 +53,6 @@ void free_blocks(Block ***blocks);
 void destroy_world(World *data_world, const Player_config *data);
 void world_generator(World *data_world, Player_config *data);
 void settle_blocks(World *data_world);
-
+void DrawChunkCornersRays(Chunk *chunk, Camera3D cam);
 
 #endif

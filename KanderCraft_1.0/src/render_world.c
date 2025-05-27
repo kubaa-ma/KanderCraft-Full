@@ -84,6 +84,10 @@ void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
     }
 }
 
+void DrawChunkBounds(Chunk *chunk, Color color) {
+    DrawBoundingBox(chunk->bounds, color);
+}
+
 void draw_blocks(World *data_world, Player_config *data_player, Model *block_model, Block_orient* sour, Camera data_camera, bool use_debbug_camera) {
 
     int player_chunk_x = (int)floor(data_camera.position.x / CHUNK_WIDTH);
@@ -101,50 +105,52 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 
     for (int cx = START_X; cx <= END_X; cx++) {
         for (int cz = START_Z; cz <= END_Z; cz++) {
-            for (int y = 0; y < CHUNK_DEPTH; y++) {
-                for (int x = 0; x < CHUNK_WIDTH; x++) {
-                    for (int z = 0; z < CHUNK_LENGTH; z++) {
+            if(data_world->data_chunks[cx][cz].is_loaded == true){
+                for (int y = 0; y < CHUNK_DEPTH; y++) {
+                    for (int x = 0; x < CHUNK_WIDTH; x++) {
+                        for (int z = 0; z < CHUNK_LENGTH; z++) {
 
-                        int c_distance_x = 0;
-                        int c_distance_z = 0;
-                        c_distance_x = cx * CHUNK_WIDTH;
-                        c_distance_z = cz * CHUNK_LENGTH;
+                            int c_distance_x = 0;
+                            int c_distance_z = 0;
+                            c_distance_x = cx * CHUNK_WIDTH;
+                            c_distance_z = cz * CHUNK_LENGTH;
 
-                        Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
+                            Block block = data_world->data_chunks[cx][cz].data_blocks[y][x][z];
 
-                        if (block.features & VISIBLE) {
-                            Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
-                            Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f + c_distance_z};//
-                            Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
-                            Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
-                            Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 1.0f + c_distance_z};//
-                            Vector3 position_right = (Vector3){sour->sour_x[x] + 1.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                            if (block.features & VISIBLE) {
+                                Vector3 position_top = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 1.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                                Vector3 position_front = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.0f + c_distance_z};//
+                                Vector3 position_left = (Vector3){sour->sour_x[x] + 0.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                                Vector3 position_bottom = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.0f, sour->sour_z[z] + 0.5f + c_distance_z};//
+                                Vector3 position_back = (Vector3){sour->sour_x[x] + 0.5f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 1.0f + c_distance_z};//
+                                Vector3 position_right = (Vector3){sour->sour_x[x] + 1.0f + c_distance_x, sour->sour_y[y] + 0.5f, sour->sour_z[z] + 0.5f + c_distance_z};//
 
 
-                            if (block.visible_faces & FACE_RIGHT) {
-                                draw_IT(block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, LIGHTGRAY, block.type);
-                            }
-                            if (block.visible_faces & FACE_LEFT) {
-                                draw_IT(block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY, block.type);
-                            }
-                            if (block.visible_faces & FACE_TOP) {
-                                if(data_camera.position.y > y){
-                                    draw_IT(block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE, block.type);
+                                if (block.visible_faces & FACE_RIGHT) {
+                                    draw_IT(block_model, position_right, ROT_RIGHT_SITE, ROT_ANGLE_RIGHT, BLOCK_SIZE, LIGHTGRAY, block.type);
                                 }
-                            }
-                            if (block.visible_faces & FACE_BOTTOM) {
-                                if(data_camera.position.y < y){
-                                    draw_IT(block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY, block.type);
+                                if (block.visible_faces & FACE_LEFT) {
+                                    draw_IT(block_model, position_left, ROT_LEFT_SITE, ROT_ANGLE_LEFT, BLOCK_SIZE, LIGHTGRAY, block.type);
                                 }
-                            }
-                            if (block.visible_faces & FACE_BACK) {
-                                draw_IT(block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE, block.type);
-                            }
-                            if (block.visible_faces & FACE_FRONT) {
-                                draw_IT(block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE, block.type);
-                            }
+                                if (block.visible_faces & FACE_TOP) {
+                                    if(data_camera.position.y > y){
+                                        draw_IT(block_model, position_top, ROT_TOP_SITE, ROT_ANGLE_TOP, BLOCK_SIZE, WHITE, block.type);
+                                    }
+                                }
+                                if (block.visible_faces & FACE_BOTTOM) {
+                                    if(data_camera.position.y < y){
+                                        draw_IT(block_model, position_bottom, ROT_BOTTOM_SITE, ROT_ANGLE_BOTTOM, BLOCK_SIZE, DARKGRAY, block.type);
+                                    }
+                                }
+                                if (block.visible_faces & FACE_BACK) {
+                                    draw_IT(block_model, position_back, ROT_BACK_SITE, ROT_ANGLE_BACK, BLOCK_SIZE, WHITE, block.type);
+                                }
+                                if (block.visible_faces & FACE_FRONT) {
+                                    draw_IT(block_model, position_front, ROT_FRONT_SITE, ROT_ANGLE_FRONT, BLOCK_SIZE, WHITE, block.type);
+                                }
 
-                            if(IsKeyDown(KEY_H) && use_debbug_camera) DrawBoundingBox(block.box, WHITE);
+                                if(IsKeyDown(KEY_H) && use_debbug_camera) DrawBoundingBox(block.box, WHITE);
+                            }
                         }
                     }
                 }
@@ -340,7 +346,20 @@ void prepeare_block_ori(Block_orient *sour){
     }
 }
 
-void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect) {
+bool CheckAABBOverlap(BoundingBox a, BoundingBox b) {
+    return (a.min.x <= b.max.x && a.max.x >= b.min.x) &&
+           (a.min.y <= b.max.y && a.max.y >= b.min.y) &&
+           (a.min.z <= b.max.z && a.max.z >= b.min.z);
+}
+
+Plane CreatePlane(Vector3 a, Vector3 b, Vector3 c) {
+    Plane p;
+    p.normal = Vector3Normalize(Vector3CrossProduct(Vector3Subtract(b, a), Vector3Subtract(c, a)));
+    p.d = -Vector3DotProduct(p.normal, a);
+    return p;
+}
+
+void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect, World *data_world, bool *is_on) {
     float tanFov = tanf(fovY * DEG2RAD / 2.0f);
 
     float nh = nearDist * tanFov;
@@ -376,12 +395,56 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
     Vector3 fbl = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, -fw)));
     Vector3 fbr = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, fw)));
 
-    DrawLine3D(ntl, ntr, RED); DrawLine3D(ntr, nbr, RED);
-    DrawLine3D(nbr, nbl, RED); DrawLine3D(nbl, ntl, RED);
 
-    DrawLine3D(ftl, ftr, BLUE); DrawLine3D(ftr, fbr, BLUE);
-    DrawLine3D(fbr, fbl, BLUE); DrawLine3D(fbl, ftl, BLUE);
+    if(*is_on){
+        DrawLine3D(ntl, ntr, RED); DrawLine3D(ntr, nbr, RED);
+        DrawLine3D(nbr, nbl, RED); DrawLine3D(nbl, ntl, RED);
 
-    DrawLine3D(ntl, ftl, GREEN); DrawLine3D(ntr, ftr, GREEN);
-    DrawLine3D(nbl, fbl, GREEN); DrawLine3D(nbr, fbr, GREEN);
+        DrawLine3D(ftl, ftr, BLUE); DrawLine3D(ftr, fbr, BLUE);
+        DrawLine3D(fbr, fbl, BLUE); DrawLine3D(fbl, ftl, BLUE);
+
+        DrawLine3D(ntl, ftl, GREEN); DrawLine3D(ntr, ftr, GREEN);
+        DrawLine3D(nbl, fbl, GREEN); DrawLine3D(nbr, fbr, GREEN);
+    }
+
+
+    Plane planes[6];
+
+    planes[0] = CreatePlane(ntr, ntl, ftl);
+    planes[1] = CreatePlane(nbl, nbr, fbr);
+    planes[2] = CreatePlane(nbr, ntr, ftr);
+    planes[3] = CreatePlane(ntl, nbl, fbl);
+    planes[4].normal = z;
+    planes[4].d = -Vector3DotProduct(planes[4].normal, nc);
+    planes[5].normal = Vector3Negate(z);
+    planes[5].d = -Vector3DotProduct(planes[5].normal, fc);
+
+    for (int i = 0; i < TOTAL_CHUNKS; i++) {
+        for (int j = 0; j < TOTAL_CHUNKS; j++) {
+            Chunk *chunk = &data_world->data_chunks[i][j];
+            BoundingBox box = chunk->bounds;
+            bool visible = true;
+
+            for (int p = 0; p < 6; p++) {
+                Vector3 v = {
+                    (planes[p].normal.x >= 0) ? box.max.x : box.min.x,
+                    (planes[p].normal.y >= 0) ? box.max.y : box.min.y,
+                    (planes[p].normal.z >= 0) ? box.max.z : box.min.z,
+                };
+
+                float dist = Vector3DotProduct(planes[p].normal, v) + planes[p].d;
+                if (dist < 0) {
+                    visible = false;
+                    break;
+                }
+            }
+
+            chunk->is_loaded = visible;
+            if(*is_on) DrawChunkBounds(chunk, visible ? GREEN : RED);
+        }
+    }
 }
+
+
+
+

@@ -39,6 +39,11 @@ typedef struct{
 }SoundsK;
 
 
+typedef struct Plane {
+    Vector3 normal;
+    float d;
+} Plane;
+
 void init_textures(Textures_K *data);
 
 void init_sounds(SoundsK *data);
@@ -65,5 +70,5 @@ void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotati
 bool Vector3EqualsK(Vector3 a, Vector3 b);
 void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds, int block_place);
 void prepeare_block_ori(Block_orient *sour);
-void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect);
+void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect, World *data_world, bool *is_on);
 #endif

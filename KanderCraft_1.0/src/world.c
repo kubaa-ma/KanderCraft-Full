@@ -279,6 +279,13 @@ void world_generator(World *data_world, Player_config *data) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world->data_chunks[i][j].x = i;
             data_world->data_chunks[i][j].z = j;
+
+
+            float worldX = (float)(i * CHUNK_WIDTH);
+            float worldZ = (float)(j * CHUNK_LENGTH);
+            data_world->data_chunks[i][j].bounds.min = (Vector3){ worldX, 0.0f, worldZ };
+            data_world->data_chunks[i][j].bounds.max = (Vector3){ worldX + CHUNK_WIDTH, CHUNK_DEPTH, worldZ + CHUNK_LENGTH };
+
             Block ***blocks = data_world->data_chunks[i][j].data_blocks;
             for (int k = 0; k < CHUNK_DEPTH; k++) {
                 for (int l = 0; l < CHUNK_WIDTH; l++) {
@@ -395,5 +402,20 @@ void settle_blocks(World *world) {
     }
 }
 
+void DrawChunkCornersRays(Chunk *chunk, Camera3D cam) {
+    Vector3 corners[8] = {
+        chunk->bounds.min,
+        {chunk->bounds.max.x, chunk->bounds.min.y, chunk->bounds.min.z},
+        {chunk->bounds.min.x, chunk->bounds.max.y, chunk->bounds.min.z},
+        {chunk->bounds.min.x, chunk->bounds.min.y, chunk->bounds.max.z},
+        {chunk->bounds.min.x, chunk->bounds.max.y, chunk->bounds.max.z},
+        {chunk->bounds.max.x, chunk->bounds.min.y, chunk->bounds.max.z},
+        {chunk->bounds.max.x, chunk->bounds.max.y, chunk->bounds.min.z},
+        chunk->bounds.max
+    };
 
+    for (int i = 0; i < 8; i++) {
+        DrawLine3D(cam.position, corners[i], SKYBLUE);
+    }
+}
 

@@ -90,7 +90,7 @@ int main() {
         BeginMode3D(use_test_camera? test_camera : camera);
         draw_blocks(&data_world, &data_player, block_model, &sour, camera, use_test_camera);
         if(IsKeyUp(KEY_L))Collision_data = detectCollision(camera, &data_world, use_test_camera);
-        DrawFrustum(camera, NEAR_PLANE, FAR_PLANE, camera.fovy, (float)GetScreenWidth()/GetScreenHeight());
+        DrawFrustum(camera, NEAR_PLANE, FAR_PLANE, camera.fovy, (float)GetScreenWidth()/GetScreenHeight(), &data_world, &is_on);
         EndMode3D();
 
         game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
