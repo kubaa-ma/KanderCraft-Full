@@ -78,7 +78,7 @@ void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
         i++;
 
         Mesh stone_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
-        models[i] = LoadModelFromMesh(dirt_face);
+        models[i] = LoadModelFromMesh(stone_face);
         models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->cobblestone;
         i++;
     }

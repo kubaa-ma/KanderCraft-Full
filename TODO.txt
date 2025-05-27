@@ -6,3 +6,5 @@ Known issues:
 Todo:
 - Fog
 - Menu
+- infinite
+- Own camera

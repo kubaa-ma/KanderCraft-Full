@@ -50,8 +50,8 @@ int load_world(World *world, const char *world_name);
 int save_chunk(const char *world_name, int i, int j, Chunk *data);
 int save_world(World *world, const char *world_name);
 void free_blocks(Block ***blocks);
-void destroy_world(World *data_world, const Player_config *data);
-void world_generator(World *data_world, Player_config *data);
+void destroy_world(World *data_world);
+void world_generator(World *data_world);
 void settle_blocks(World *data_world);
 void DrawChunkCornersRays(Chunk *chunk, Camera3D cam);
 

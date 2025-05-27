@@ -264,7 +264,7 @@ Chunk** allocate_chunk() {
     return data_chunks;
 }
 
-void destroy_world(World *data_world, const Player_config *data){
+void destroy_world(World *data_world){
     for (int i = 0; i < TOTAL_CHUNKS; i++){
         for (int j = 0; j < TOTAL_CHUNKS; j++){
             free_blocks(data_world->data_chunks[i][j].data_blocks);
@@ -274,7 +274,7 @@ void destroy_world(World *data_world, const Player_config *data){
     free(data_world->data_chunks);
 }
 
-void world_generator(World *data_world, Player_config *data) {
+void world_generator(World *data_world) {
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world->data_chunks[i][j].x = i;

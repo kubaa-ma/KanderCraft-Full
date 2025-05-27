@@ -40,7 +40,7 @@ void init_player(Player_config *data, Camera *camera){
     camera->fovy = data->fovy;
 }
 
-void side_info(Font standart, Camera camera, Vector5 CollisionData, bool *use_test_camera){
+void side_info(Font standart, Camera camera, Vector5 CollisionData){
 
         char side_Info[512];
         float frameTime = GetFrameTime();
@@ -66,7 +66,7 @@ void game_settings(bool *is_on, Font standart, Camera *camera, Vector5 Collision
         *is_on = !*is_on;
     }
     if(*is_on){
-        side_info(standart, *camera, CollisionData, use_test_camera);
+        side_info(standart, *camera, CollisionData);
     }
     if(IsKeyDown(KEY_J) && camera->fovy > 1){
         camera->fovy -=0.5;

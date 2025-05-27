@@ -35,7 +35,7 @@ void take_player_info(Player_config *data, Camera *camera);
 
 void init_player(Player_config *data, Camera *camera);
 
-void side_info(Font standart, Camera camera, Vector5 Collisiondata, bool *use_test_camera);
+void side_info(Font standart, Camera camera, Vector5 Collisiondata);
 
 void game_settings(bool *is_on, Font standart, Camera *camera, Vector5 Collisiondata, bool *use_test_camera);
 #endif
