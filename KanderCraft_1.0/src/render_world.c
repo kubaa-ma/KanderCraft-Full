@@ -14,6 +14,7 @@
 #include "../include/world.h"
 #include "../include/render_world.h"
 #include "../include/block.h"
+#include "raymath.h"
 
 void init_sounds(SoundsK *data){
     data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
@@ -153,7 +154,6 @@ void draw_blocks(World *data_world, Player_config *data_player, Model *block_mod
 }
 bool Vector3EqualsK(Vector3 a, Vector3 b) {
 
-    const float EPSILON =  0.0001f;
 
     return (fabsf(a.x - b.x) < EPSILON &&
             fabsf(a.y - b.y) < EPSILON &&
@@ -162,7 +162,6 @@ bool Vector3EqualsK(Vector3 a, Vector3 b) {
 
 
 bool FloatEqualsK(float a, float b) {
-    const float EPSILON = 0.0001f;
     return fabsf(a - b) < EPSILON;
 }
 
@@ -226,7 +225,6 @@ Vector3 GetHitNormal(Ray ray, BoundingBox box) {
     if (!collision.hit) return normal;
 
     Vector3 point = collision.point;
-    const float EPSILON = 0.001f;
 
     if (fabsf(point.x - box.min.x) < EPSILON) normal.x = -1;
     else if (fabsf(point.x - box.max.x) < EPSILON) normal.x = 1;
@@ -340,4 +338,50 @@ void prepeare_block_ori(Block_orient *sour){
             }
         }
     }
+}
+
+void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect) {
+    float tanFov = tanf(fovY * DEG2RAD / 2.0f);
+
+    float nh = nearDist * tanFov;
+    float nw = nh * aspect;
+
+    float fh = farDist * tanFov;
+    float fw = fh * aspect;
+
+/*      
+        _________ <-- far plane
+        \   :)  /
+         \     /        <-- FOV cone
+          \   /
+           \ /
+           ---          <-- near plane
+       camera (you) 
+*/
+
+    Vector3 z = Vector3Normalize(Vector3Subtract(cam.target, cam.position));
+    Vector3 x = Vector3Normalize(Vector3CrossProduct(z, cam.up));
+    Vector3 y = Vector3CrossProduct(x, z);
+
+    Vector3 nc = Vector3Add(cam.position, Vector3Scale(z, nearDist));
+    Vector3 fc = Vector3Add(cam.position, Vector3Scale(z, farDist));
+
+    Vector3 ntl = Vector3Add(nc, Vector3Add(Vector3Scale(y, nh), Vector3Scale(x, -nw)));
+    Vector3 ntr = Vector3Add(nc, Vector3Add(Vector3Scale(y, nh), Vector3Scale(x, nw)));
+    Vector3 nbl = Vector3Add(nc, Vector3Add(Vector3Scale(y, -nh), Vector3Scale(x, -nw)));
+    Vector3 nbr = Vector3Add(nc, Vector3Add(Vector3Scale(y, -nh), Vector3Scale(x, nw)));
+
+    Vector3 ftl = Vector3Add(fc, Vector3Add(Vector3Scale(y, fh), Vector3Scale(x, -fw)));
+    Vector3 ftr = Vector3Add(fc, Vector3Add(Vector3Scale(y, fh), Vector3Scale(x, fw)));
+    Vector3 fbl = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, -fw)));
+    Vector3 fbr = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, fw)));
+
+    DrawLine3D(ntl, ntr, RED); DrawLine3D(ntr, nbr, RED);
+    DrawLine3D(nbr, nbl, RED); DrawLine3D(nbl, ntl, RED);
+
+    DrawLine3D(ftl, ftr, BLUE); DrawLine3D(ftr, fbr, BLUE);
+    DrawLine3D(fbr, fbl, BLUE); DrawLine3D(fbl, ftl, BLUE);
+
+    DrawLine3D(ntl, ftl, GREEN); DrawLine3D(ntr, ftr, GREEN);
+    DrawLine3D(nbl, fbl, GREEN); DrawLine3D(nbr, fbr, GREEN);
 }

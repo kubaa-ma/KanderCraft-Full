@@ -67,6 +67,7 @@
     "config.h": "c",
     "world_config.h": "c",
     "raylib.h": "c",
-    "stdbool.h": "c"
+    "stdbool.h": "c",
+    "raymath.h": "c"
   }
 }

@@ -21,6 +21,8 @@
 #define CHUNK_DEPTH 70
 #define MAX_SIZE CHUNK_DEPTH * TOTAL_CHUNKS //ONLY IF CHUNK_WIDTH = CHUNK_LENGTH
 
+#define NEAR_PLANE 0.1f
+#define FAR_PLANE 20.0f
 
 
 #define ROT_RIGHT_SITE (Vector3){0.0f, 0.0f, 1.0f}
