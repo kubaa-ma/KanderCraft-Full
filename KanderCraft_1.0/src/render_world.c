@@ -368,6 +368,10 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
     float fh = farDist * tanFov;
     float fw = fh * aspect;
 
+    float midDist = (nearDist + farDist) / 2.0f;
+    float midh = midDist * tanFov;
+    float midw = midh * aspect;
+
 /*      
         _________ <-- far plane
         \   :)  /
@@ -384,6 +388,7 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
 
     Vector3 nc = Vector3Add(cam.position, Vector3Scale(z, nearDist));
     Vector3 fc = Vector3Add(cam.position, Vector3Scale(z, farDist));
+    Vector3 midc = Vector3Add(cam.position, Vector3Scale(z, midDist));
 
     Vector3 ntl = Vector3Add(nc, Vector3Add(Vector3Scale(y, nh), Vector3Scale(x, -nw)));
     Vector3 ntr = Vector3Add(nc, Vector3Add(Vector3Scale(y, nh), Vector3Scale(x, nw)));
@@ -395,8 +400,12 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
     Vector3 fbl = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, -fw)));
     Vector3 fbr = Vector3Add(fc, Vector3Add(Vector3Scale(y, -fh), Vector3Scale(x, fw)));
 
+    Vector3 midtl = Vector3Add(midc, Vector3Add(Vector3Scale(y, midh), Vector3Scale(x, -midw)));
+    Vector3 midtr = Vector3Add(midc, Vector3Add(Vector3Scale(y, midh), Vector3Scale(x, midw)));
+    Vector3 midbl = Vector3Add(midc, Vector3Add(Vector3Scale(y, -midh), Vector3Scale(x, -midw)));
+    Vector3 midbr = Vector3Add(midc, Vector3Add(Vector3Scale(y, -midh), Vector3Scale(x, midw)));
 
-    if(*is_on){
+    if (*is_on) {
         DrawLine3D(ntl, ntr, RED); DrawLine3D(ntr, nbr, RED);
         DrawLine3D(nbr, nbl, RED); DrawLine3D(nbl, ntl, RED);
 
@@ -405,11 +414,19 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
 
         DrawLine3D(ntl, ftl, GREEN); DrawLine3D(ntr, ftr, GREEN);
         DrawLine3D(nbl, fbl, GREEN); DrawLine3D(nbr, fbr, GREEN);
+
+        DrawLine3D(midtl, midtr, VIOLET); DrawLine3D(midtr, midbr, VIOLET);
+        DrawLine3D(midbr, midbl, VIOLET); DrawLine3D(midbl, midtl, VIOLET);
+
+        DrawLine3D(cam.position, nc, DARKGRAY);
+        DrawLine3D(cam.position, fc, DARKGRAY);
+        DrawLine3D(cam.position, midc, DARKGRAY);
+
+        DrawLine3D(midtl, midbr, ORANGE);
+        DrawLine3D(midtr, midbl, ORANGE);
     }
 
-
     Plane planes[6];
-
     planes[0] = CreatePlane(ntr, ntl, ftl);
     planes[1] = CreatePlane(nbl, nbr, fbr);
     planes[2] = CreatePlane(nbr, ntr, ftr);
@@ -440,10 +457,11 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
             }
 
             chunk->is_loaded = visible;
-            if(*is_on) DrawChunkBounds(chunk, visible ? GREEN : RED);
+            if (*is_on) DrawChunkBounds(chunk, visible ? GREEN : RED);
         }
     }
 }
+
 
 
 
