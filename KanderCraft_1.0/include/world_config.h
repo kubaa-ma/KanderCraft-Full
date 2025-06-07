@@ -12,13 +12,13 @@
  *  under the BSD 2-Clause License. See LICENSE file for details.
  ***************************************************************/
 
-#define TOTAL_CHUNKS 2
+#define TOTAL_CHUNKS 8
 
 #define BLOCK_SITE_SIZE 0.1f
 
 #define CHUNK_WIDTH 17 //Only Odd numbers
 #define CHUNK_LENGTH 17
-#define CHUNK_DEPTH 70
+#define CHUNK_DEPTH 18
 #define MAX_SIZE CHUNK_DEPTH * TOTAL_CHUNKS //ONLY IF CHUNK_WIDTH = CHUNK_LENGTH
 
 #define NEAR_PLANE 0.1f

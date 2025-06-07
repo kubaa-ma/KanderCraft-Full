@@ -293,11 +293,11 @@ void world_generator(World *data_world) {
         
                         blocks[k][l][m].type = BLOCK_DIRT;
     
-                        if(k > 50 && k < CHUNK_DEPTH){
+                        if(k > 6 && k < CHUNK_DEPTH){
                             blocks[k][l][m].type = BLOCK_AIR;
 
                         }
-                        if(k == 50 && k < CHUNK_DEPTH){
+                        if(k == 6 && k < CHUNK_DEPTH){
                             blocks[k][l][m].type = BLOCK_GRASS;
 
                         }
