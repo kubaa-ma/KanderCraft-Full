@@ -17,6 +17,7 @@
 #include <direct.h>//Only for windows
 #include <errno.h>
 #include <string.h>
+#include "stb_perlin.h"
 
 int copy_file(const char *source_path, const char *dest_path) {
     FILE *src = fopen(source_path, "rb");
@@ -275,11 +276,14 @@ void destroy_world(World *data_world){
 }
 
 void world_generator(World *data_world) {
+    float scale = 0.05f;
+    float height_scale = 4.0f;
+    int base_height = 6;
+
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {
             data_world->data_chunks[i][j].x = i;
             data_world->data_chunks[i][j].z = j;
-
 
             float worldX = (float)(i * CHUNK_WIDTH);
             float worldZ = (float)(j * CHUNK_LENGTH);
@@ -287,57 +291,48 @@ void world_generator(World *data_world) {
             data_world->data_chunks[i][j].bounds.max = (Vector3){ worldX + CHUNK_WIDTH, CHUNK_DEPTH, worldZ + CHUNK_LENGTH };
 
             Block ***blocks = data_world->data_chunks[i][j].data_blocks;
-            for (int k = 0; k < CHUNK_DEPTH; k++) {
-                for (int l = 0; l < CHUNK_WIDTH; l++) {
-                    for (int m = 0; m < CHUNK_LENGTH; m++) {
-        
-                        blocks[k][l][m].type = BLOCK_DIRT;
-    
-                        if(k > 6 && k < CHUNK_DEPTH){
-                            blocks[k][l][m].type = BLOCK_AIR;
 
-                        }
-                        if(k == 6 && k < CHUNK_DEPTH){
-                            blocks[k][l][m].type = BLOCK_GRASS;
+            for (int l = 0; l < CHUNK_WIDTH; l++) {
+                for (int m = 0; m < CHUNK_LENGTH; m++) {
+                    float nx = (i * CHUNK_WIDTH + l) * scale;
+                    float nz = (j * CHUNK_LENGTH + m) * scale;
+                    float noise = stb_perlin_noise3(nx, 0.0f, nz, 0, 0, 0);
+                    int height = base_height + (int)(noise * height_scale);
 
-                        }
-                        if (i == 0 && l == 0) {
-                            blocks[k][l][m].type = BLOCK_AIR;
-                        }
-                        if (j == 0 && m == 0) {
-                            blocks[k][l][m].type = BLOCK_AIR;
-                        }
-                        if (k == 0) {
-                            blocks[k][l][m].type = BLOCK_AIR;
-                        }
+                    for (int k = 0; k < CHUNK_DEPTH; k++) {
+                        Block *b = &blocks[k][l][m];
+                        b->features = 0;
+                        b->visible_faces = 0;
 
-                    
-                        if (i == TOTAL_CHUNKS - 1 && l == CHUNK_WIDTH - 1) {
-                            blocks[k][l][m].type = BLOCK_AIR;
-                        }
-                        if (j == TOTAL_CHUNKS - 1 && m == CHUNK_LENGTH - 1) {
-                            blocks[k][l][m].type = BLOCK_AIR;
+                        if (k > height) {
+                            b->type = BLOCK_AIR;
+                        } else if (k == height) {
+                            if (stb_perlin_noise3(nx, k * 0.1f, nz, 0, 0, 0) > 0.3f)
+                                b->type = BLOCK_STONE;
+                            else
+                                b->type = BLOCK_GRASS;
+                        } else if (k >= height - 2) {
+                            b->type = BLOCK_DIRT;
+                        } else {
+                            b->type = BLOCK_STONE;
                         }
 
-                        if (blocks[k][l][m].type != BLOCK_AIR) {
-                            blocks[k][l][m].features = SOLID | OPAQUE | VISIBLE;
-    
+                        if (b->type != BLOCK_AIR) {
+                            b->features = SOLID | OPAQUE | VISIBLE;
                             Vector3 pos = {(float)(i * CHUNK_WIDTH + l), (float)k, (float)(j * CHUNK_LENGTH + m)};
-                            
-                            blocks[k][l][m].box.min = (Vector3){pos.x - 0.0f, pos.y - 0.0f, pos.z - 0.0f};
-                            blocks[k][l][m].box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
-                        } else if(blocks[k][l][m].type == BLOCK_AIR){
-                                blocks[k][l][m].features = 0;
-                                blocks[k][l][m].visible_faces = 0;
+                            b->box.min = (Vector3){pos.x, pos.y, pos.z};
+                            b->box.max = (Vector3){pos.x + 1.0f, pos.y + 1.0f, pos.z + 1.0f};
+                        } else {
+                            b->box.min = (Vector3){999, 999, 999};
+                            b->box.max = (Vector3){999, 999, 999};
                         }
-
-
                     }
                 }
             }
         }
-    }    
+    }
 }
+
 
 void settle_blocks(World *world) {
     for (int cx = 0; cx < TOTAL_CHUNKS; cx++) {
