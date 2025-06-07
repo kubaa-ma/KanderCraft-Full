@@ -319,6 +319,26 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera, Sounds
             int newY = Collision_data.y + (int)normal.y;
             int newZ = Collision_data.z + (int)normal.z;
 
+            if (newX >= CHUNK_WIDTH) {
+                newX = 0;
+                Collision_data.cx += 1;
+            }
+            if (newZ >= CHUNK_LENGTH) {
+                newZ = 0;
+                Collision_data.cz += 1;
+            }
+            if (newX < 0) {
+                newX = CHUNK_WIDTH - 1;
+                Collision_data.cx -= 1;
+            }
+            if (newZ < 0) {
+                newZ = CHUNK_LENGTH - 1;
+                Collision_data.cz -= 1;
+            }
+            c_distance_x = 0;
+            c_distance_z = 0;
+            c_distance_z = Collision_data.cx * CHUNK_WIDTH;
+            c_distance_x = Collision_data.cz * CHUNK_LENGTH;
             if(block_place == 0){
                 PlaySound(sounds->place_loose_block);
                 data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIRT;
