@@ -12,7 +12,7 @@
  *  under the BSD 2-Clause License. See LICENSE file for details.
  ***************************************************************/
 
-#define TOTAL_CHUNKS 8
+#define TOTAL_CHUNKS 10
 
 #define BLOCK_SITE_SIZE 0.1f
 

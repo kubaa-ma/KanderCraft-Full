@@ -17,9 +17,9 @@ int create_config(Player_config *data){
     FILE *config;
 
     data->render_distance = RENDER_DISTANCE_STANDARD;
-    data->pos_x = 14;
+    data->pos_x = (CHUNK_WIDTH*TOTAL_CHUNKS) / 2;
     data->pos_y = 52;
-    data->pos_z = 10;
+    data->pos_z = (CHUNK_LENGTH*TOTAL_CHUNKS) / 2;
 
     data->tar_x = 0;
     data->tar_y = 0;
