@@ -17,13 +17,15 @@
 #include "../include/player_configuration.h"
 #include "../include/config.h"
 #include "../include/block.h"
+#include "../include/folders.h"
 
-#define WORLD_NAME "Test_world"
 
 int main() {
 
     Player_config data_player;
-
+    GAMESTATE state = MENU;
+    Button button_menu;
+    Button button_wlist;
     if (load_config(&data_player)) create_config(&data_player);
     
 
@@ -38,13 +40,13 @@ int main() {
     }
     
 
-    if(load_world_files(WORLD_NAME) == 1) create_world_files(WORLD_NAME);
-    
-    load_world(&data_world, WORLD_NAME);
+
 
     int block_place = 0;
     bool is_on = false;
     bool use_test_camera = false;
+    char world_list[458] = { 0 };
+    char world_name[88];
     Block_orient sour;
     Vector5 Collision_data;
     prepeare_block_ori(&sour);
@@ -73,43 +75,74 @@ int main() {
     create_camera(&test_camera, &screenCenter, &cameralast);
     init_player(&data_player, &test_camera);
 
+
+
     while (!WindowShouldClose()) {
 
-        if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
-        
-        Centering_cursor();
-        UpdateCamera(use_test_camera? &test_camera : &camera, CAMERA_FREE);
-        UpdateMusicStream(data_sounds.music3);
+        if(state == MENU){
 
-        if (!IsMusicStreamPlaying(data_sounds.music3)) {
-            PlayMusicStream(data_sounds.music3);
+            BeginDrawing();
+            ClearBackground(WHITE);
+            int x = (screenWidth - textures.button.width) / 2;
+            int z = (screenHeight - textures.button.height) / 2;
+            draw_menu(textures);
+            draw_buttons(&button_menu, textures.button, &state, x + 484, z + 400, 0, "NONE", "NONE");
+            DrawTextPro(textures.standrat_font, "Play", (Vector2){884, 648}, (Vector2){0, 0}, 0, 42, 1.0f, WHITE);
+            
+            EndDrawing();
+
+        }else if(state == WORLDS){
+            int count = load_folder_names(world_list, sizeof(world_list)); 
+            BeginDrawing();
+            ClearBackground(WHITE);
+            draw_menu(textures);
+
+            int a;
+            for(int i = 0; i < count; i++){a = draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list);}
+            DrawMultilineText(world_list, (Vector2){534, 400}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
+
+            if(load_world_files(world_name) == 1 && a != 0) create_world_files("NewWorld[Rename]");
+    
+            if(a == 0) load_world(&data_world, world_name);
+
+            EndDrawing();
         }
-        BeginDrawing();
-        ClearBackground(SKYBLUE);
+        else if(state == GAME){
+            if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
+            
+            Centering_cursor();
+            UpdateCamera(use_test_camera? &test_camera : &camera, CAMERA_FREE);
+            UpdateMusicStream(data_sounds.music3);
 
-        BeginMode3D(use_test_camera? test_camera : camera);
-        draw_blocks(&data_world, &data_player, block_model, &sour, camera, use_test_camera);
-        if(IsKeyUp(KEY_L))Collision_data = detectCollision(camera, &data_world, use_test_camera);
-        DrawFrustum(camera, NEAR_PLANE, FAR_PLANE, camera.fovy, (float)GetScreenWidth()/GetScreenHeight(), &data_world, &is_on);
-        EndMode3D();
+            if (!IsMusicStreamPlaying(data_sounds.music3)) {
+                PlayMusicStream(data_sounds.music3);
+            }
+            BeginDrawing();
+            ClearBackground(SKYBLUE);
 
-        game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
-        if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, screenWidth, screenHeight, WHITE);
-        EndDrawing();
+            BeginMode3D(use_test_camera? test_camera : camera);
+            draw_blocks(&data_world, &data_player, block_model, &sour, camera, use_test_camera);
+            if(IsKeyUp(KEY_L))Collision_data = detectCollision(camera, &data_world, use_test_camera);
+            DrawFrustum(camera, NEAR_PLANE, FAR_PLANE, camera.fovy, (float)GetScreenWidth()/GetScreenHeight(), &data_world, &is_on);
+            EndMode3D();
 
-        Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
-        settle_blocks(&data_world);
-        if(GetMouseWheelMove()){
-            if(block_place == 0){
-                block_place = 1;
-            } else if (block_place == 1){
-                block_place = 0;
+            game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
+            if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, screenWidth, screenHeight, WHITE);
+            EndDrawing();
+
+            Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
+            settle_blocks(&data_world);
+            if(GetMouseWheelMove()){
+                if(block_place == 0){
+                    block_place = 1;
+                } else if (block_place == 1){
+                    block_place = 0;
+                }
             }
         }
-
     }
 
-    save_world(&data_world, WORLD_NAME);
+    save_world(&data_world, world_name);
 
     take_player_info(&data_player, &camera);
     save_config(&data_player);

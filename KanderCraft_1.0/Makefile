@@ -3,7 +3,7 @@ RC = windres
 CFLAGS = -Iinclude -std=c99 -Wall -Wextra
 LDFLAGS = -Llib -lraylib -lopengl32 -lgdi32 -lwinmm
 
-SRCS = src/main.c src/world.c src/block.c src/render_world.c src/config.c src/player_configuration.c
+SRCS = src/main.c src/world.c src/block.c src/render_world.c src/config.c src/player_configuration.c src/folders.c
 OBJS = $(SRCS:src/%.c=build/%.o)
 RES = build/resources.o
 

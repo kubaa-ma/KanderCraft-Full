@@ -40,7 +40,6 @@ Chunk** allocate_chunk();
 Block ***allocate_blocks();
 
 
-
 int copy_file(const char *source_path, const char *dest_path);
 int create_world_files(const char *world_name);
 int load_world_files(const char *world_name);

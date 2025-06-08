@@ -18,6 +18,9 @@
 #include <errno.h>
 #include <string.h>
 #include "stb_perlin.h"
+#include <stdio.h>
+#include <string.h>
+
 
 int copy_file(const char *source_path, const char *dest_path) {
     FILE *src = fopen(source_path, "rb");

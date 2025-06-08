@@ -15,6 +15,7 @@
 #include "../include/render_world.h"
 #include "../include/block.h"
 #include "raymath.h"
+#include <string.h>
 
 void init_sounds(SoundsK *data){
     data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
@@ -47,6 +48,10 @@ void init_textures(Textures_K *data) {
     data->grass[4] = LoadTexture("assets/grass/grass_side_right.png");
     data->grass[5] = LoadTexture("assets/grass/grass_top.png");
     data->cobblestone = LoadTexture("assets/default_cobble.png");
+    data->MENU_backgroundK = LoadTexture("assets/Background.png");
+    data->button = LoadTexture("assets/button.png");
+    data->button_t = LoadTexture("assets/button_tinner.png");
+
 
 }
 
@@ -55,6 +60,9 @@ void unload_textures(Textures_K *data) {
     UnloadTexture(data->cursor);
     UnloadFont(data->standrat_font);
     UnloadTexture(data->cobblestone);
+    UnloadTexture(data->MENU_backgroundK);
+    UnloadTexture(data->button);
+    UnloadTexture(data->button_t);
     for(int i = 0; i < CUBE_SIDES; i ++){
         UnloadTexture(data->grass[i]);
     }
@@ -483,6 +491,107 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
 }
 
 
+int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]){
+    button->rect = (Rectangle){x, z, textures_struct.width, textures_struct.height};
+    Vector2 mouse = GetMousePosition();
+    button->covered = CheckCollisionPointRec(mouse, button->rect);
+    button->clicked = CheckCollisionPointRec(mouse, button->rect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
+    Color lightGray = (Color){ 200, 200, 200, 255 };
+
+    if(button->clicked){
+        DrawTexture(textures_struct, x, z, DARKGRAY);
+
+        if(*state == MENU){ 
+            *state = WORLDS;
+            return 0;
+        }
+        if(*state == WORLDS){ 
+            int currentIndex = 0;
+            char *start = world_list;
+            char *end = NULL;
+
+            while(currentIndex < i && *start != '\0'){
+                end = strchr(start, '\n');
+                if(!end) break;
+                start = end + 1;
+                currentIndex++;
+            }
+
+            if(*start != '\0'){
+                end = strchr(start, '\n');
+                if(!end) end = start + strlen(start);
+                int len = (int)(end - start);
+                if(len > 255) len = 255;
+                strncpy(world_name, start, len);
+                world_name[len] = '\0';
+            } else {
+                world_name[0] = '\0';
+            }
+
+            *state = GAME;
+            HideCursor();
+
+            return 1;
+        }
+    }
+    else if(button->covered){
+        DrawTexture(textures_struct, x, z, lightGray);
+    }
+    else{
+        DrawTexture(textures_struct, x, z, WHITE);
+    }
+    return 0;
+}
 
 
+void draw_menu(Textures_K textures){
+
+    int screenWidth = GetScreenWidth();
+    int screenHeight = GetScreenHeight();
+
+    int tilesX = screenWidth / 32;
+    int tilesY = screenHeight / 32;
+    tilesY++;
+    for (int i = 0; i < tilesX + 2; i++) {
+        for (int j = 0; j < tilesY + 2; j++) {
+            Texture2D tex = (j % 2 == 1) ? textures.dirt : textures.cobblestone;
+
+            Rectangle source = { 0, 0, (float)tex.width, (float)tex.height };
+
+            Rectangle dest = { i * 32.0f, j * 32.0f, 32.0f, 32.0f };
+
+            Vector2 origin = { 0, 0 };
+
+            DrawTexturePro(tex, source, dest, origin, 0.0f, WHITE);
+        }
+    }
+
+
+    DrawTexture(textures.MENU_backgroundK, (int)(GetScreenWidth() / 2) - textures.MENU_backgroundK.height - 144, 100, WHITE);
+
+}
+
+void DrawMultilineText(const char *text, Vector2 position, int fontSize, float spacing, float lineSpacing, Color color, Font font) {
+    const char *start = text;
+    const char *end;
+    Vector2 pos = position;
+
+    while (*start) {
+        end = strchr(start, '\n');
+        if (!end) end = start + strlen(start);
+
+        char line[256] = { 0 };
+        size_t len = end - start;
+        if (len >= sizeof(line)) len = sizeof(line) - 1;
+        strncpy(line, start, len);
+        line[len] = '\0';
+
+        DrawTextEx(font, line, pos, fontSize, spacing, color);
+
+        pos.y += fontSize + lineSpacing;
+
+        if (*end == '\0') break;
+        start = end + 1;
+    }
+}
 
