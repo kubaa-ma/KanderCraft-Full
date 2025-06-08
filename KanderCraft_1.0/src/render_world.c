@@ -491,37 +491,39 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
 }
 
 
-int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]){
+int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]) {
     button->rect = (Rectangle){x, z, textures_struct.width, textures_struct.height};
     Vector2 mouse = GetMousePosition();
     button->covered = CheckCollisionPointRec(mouse, button->rect);
-    button->clicked = CheckCollisionPointRec(mouse, button->rect) && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
-    Color lightGray = (Color){ 200, 200, 200, 255 };
+    button->clicked = button->covered && IsMouseButtonPressed(MOUSE_BUTTON_LEFT);
 
-    if(button->clicked){
+    Color lightGray = (Color){200, 200, 200, 255};
+
+    if (button->clicked) {
         DrawTexture(textures_struct, x, z, DARKGRAY);
 
-        if(*state == MENU){ 
+        if (*state == MENU) {
             *state = WORLDS;
             return 0;
         }
-        if(*state == WORLDS){ 
+
+        if (*state == WORLDS) {
             int currentIndex = 0;
             char *start = world_list;
             char *end = NULL;
 
-            while(currentIndex < i && *start != '\0'){
+            while (currentIndex < i && *start != '\0') {
                 end = strchr(start, '\n');
-                if(!end) break;
+                if (!end) break;
                 start = end + 1;
                 currentIndex++;
             }
 
-            if(*start != '\0'){
+            if (*start != '\0') {
                 end = strchr(start, '\n');
-                if(!end) end = start + strlen(start);
+                if (!end) end = start + strlen(start);
                 int len = (int)(end - start);
-                if(len > 255) len = 255;
+                if (len > 255) len = 255;
                 strncpy(world_name, start, len);
                 world_name[len] = '\0';
             } else {
@@ -533,15 +535,15 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
 
             return 1;
         }
-    }
-    else if(button->covered){
+    } else if (button->covered) {
         DrawTexture(textures_struct, x, z, lightGray);
-    }
-    else{
+    } else {
         DrawTexture(textures_struct, x, z, WHITE);
     }
+
     return 0;
 }
+
 
 
 void draw_menu(Textures_K textures){

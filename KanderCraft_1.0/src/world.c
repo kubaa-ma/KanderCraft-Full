@@ -89,7 +89,7 @@ int load_world_files(const char *world_name) {
 
     src = fopen(world_path, "rb");
     if (src == NULL) {
-        printf("Creating new world");
+        printf("Creating new world\n");
         return 1;
     }
     

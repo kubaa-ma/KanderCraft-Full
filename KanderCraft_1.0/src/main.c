@@ -91,23 +91,28 @@ int main() {
             
             EndDrawing();
 
-        }else if(state == WORLDS){
+        }else if(state == WORLDS) {
             int count = load_folder_names(world_list, sizeof(world_list)); 
+
             BeginDrawing();
             ClearBackground(WHITE);
             draw_menu(textures);
 
-            int a;
-            for(int i = 0; i < count; i++){a = draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list);}
+            int clicked = 0;
+            for(int i = 0; i < count; i++) {
+                if (draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list)) {
+                    clicked = 1;
+                }
+            }
+
             DrawMultilineText(world_list, (Vector2){534, 400}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
 
-            if(load_world_files(world_name) == 1 && a != 0) create_world_files("NewWorld[Rename]");
-    
-            if(a == 0) load_world(&data_world, world_name);
+            if (clicked) {
+                load_world(&data_world, world_name);
+            }
 
             EndDrawing();
-        }
-        else if(state == GAME){
+        } else if(state == GAME){
             if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
             
             Centering_cursor();
@@ -128,6 +133,8 @@ int main() {
 
             game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
             if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, screenWidth, screenHeight, WHITE);
+
+
             EndDrawing();
 
             Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
