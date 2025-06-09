@@ -23,6 +23,8 @@
 #define CUBE_SIDES 6
 #define TEXTURES_AMOUNT 128
 
+#define MAX_DIGITS 20
+
 typedef struct {
     Texture2D dirt;
     Texture2D grass[CUBE_SIDES];
@@ -80,6 +82,9 @@ void load_icon(char *world_list, Textures_K *textures);
 void draw_icons(Textures_K textures);
 
 void unload_unnecessary(Textures_K *textures);
+
+int name_input(char *world_name);
+
 
 void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
 bool Vector3EqualsK(Vector3 a, Vector3 b);

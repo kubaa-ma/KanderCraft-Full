@@ -509,7 +509,7 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
             return 0;
         }
 
-        if (*state == WORLDS) {
+        if (*state == WORLDS && i != 999 && i != 1000) {
             int currentIndex = 0;
             char *start = world_list;
             char *end = NULL;
@@ -536,6 +536,12 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
             HideCursor();
 
             return 1;
+        } if(i == 999){
+            memset(world_name, 0, sizeof(*world_name));
+            *state = NEW_WORLDK;
+            return 999;
+        } if(i == 1000){
+            return 1000;
         }
     } else if (button->covered) {
         DrawTexture(textures_struct, x, z, lightGray);
@@ -546,6 +552,34 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
     return 0;
 }
 
+int name_input(char *world_name) {
+    static int letterCount = 0;
+    int key = GetCharPressed();
+
+    while (key > 0) {
+        if (((key >= '0' && key <= '9') || 
+             (key >= 'a' && key <= 'z') || 
+             (key >= 'A' && key <= 'Z') || 
+             key == '_' || key == '-') && 
+            (letterCount < MAX_DIGITS - 1)) {
+            
+            world_name[letterCount] = (char)key;
+            letterCount++;
+            world_name[letterCount] = '\0';
+        }
+
+        key = GetCharPressed();
+    }
+
+    if (IsKeyPressed(KEY_BACKSPACE)) {
+        if (letterCount > 0) {
+            letterCount--;
+            world_name[letterCount] = '\0';
+        }
+    }
+
+    return letterCount;
+}
 void load_icon(char *world_list, Textures_K *textures) {
     char buffer[256];
     char *start = world_list;

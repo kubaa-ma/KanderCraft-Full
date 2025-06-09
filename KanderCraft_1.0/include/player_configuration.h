@@ -34,7 +34,7 @@ typedef struct{
     bool clicked;
 } Button;
 
-typedef enum {MENU, SETTINGS, GAME, WORLDS}GAMESTATE;
+typedef enum {MENU, SETTINGS, GAME, WORLDS, NEW_WORLDK, NONE}GAMESTATE;
 
 void create_camera(Camera *camera, Vector2 *screenCenter, Vector3 *cameralast);
 

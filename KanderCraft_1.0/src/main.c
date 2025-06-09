@@ -83,9 +83,9 @@ int main() {
             draw_menu(textures);
             draw_buttons(&button_menu, textures.button, &state, x + 484, z + 400, 0, "NONE", "NONE");
             DrawTextPro(textures.standrat_font, "Play", (Vector2){884, 648}, (Vector2){0, 0}, 0, 42, 1.0f, WHITE);
-            
+            game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
             EndDrawing();
-
+            
         }else if(state == WORLDS) {
 
             BeginDrawing();
@@ -99,6 +99,15 @@ int main() {
                 }
             }
 
+            if(count < 4){
+                int x = GetScreenWidth() - textures.button.width;
+                int y = GetScreenHeight() - textures.button.height;
+
+                draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 999, world_name, world_list);
+                DrawMultilineText("Create New World!", (Vector2){x - 60, y - 18}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
+
+            }
+
             DrawMultilineText(world_list, (Vector2){534, 400}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
 
             if (clicked) {
@@ -109,8 +118,38 @@ int main() {
 
                 unload_unnecessary(&textures);
             }
-
+            game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
             EndDrawing();
+        
+        }else if(state == NEW_WORLDK){
+            char output_text[256];
+            sprintf(output_text, "Name of the world: %s\n", world_name);
+            BeginDrawing();
+                draw_menu(textures);
+                name_input(world_name);
+                DrawMultilineText(output_text, (Vector2){534, 400}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
+                
+                int clicked = 0;
+                int x = GetScreenWidth() - textures.button.width;
+                int y = GetScreenHeight() - textures.button.height;
+                if(draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 1000, world_name, world_list) == 1000){
+                    clicked = 1000;
+                }
+                DrawMultilineText("Create!", (Vector2){x - 60, y - 18}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
+            EndDrawing();
+
+            if(clicked == 1000){
+                create_world_files(world_name);
+                create_config(&data_player, world_name);
+                init_player(&data_player, &camera);
+                init_player(&data_player, &test_camera);
+
+                unload_unnecessary(&textures);
+                state = GAME;
+                HideCursor();
+            }
+
+
         } else if(state == GAME){
             if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
             
