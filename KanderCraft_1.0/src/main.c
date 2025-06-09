@@ -26,7 +26,6 @@ int main() {
     GAMESTATE state = MENU;
     Button button_menu;
     Button button_wlist;
-    if (load_config(&data_player)) create_config(&data_player);
     
 
     World data_world;
@@ -66,11 +65,9 @@ int main() {
     Vector2 screenCenter;
     Vector3 cameralast;
     create_camera(&camera, &screenCenter, &cameralast);
-    init_player(&data_player, &camera);
 
     Camera test_camera = { 0 };
     create_camera(&test_camera, &screenCenter, &cameralast);
-    init_player(&data_player, &test_camera);
     int count = load_folder_names(world_list, sizeof(world_list)); 
     load_icon(world_list, &textures);
 
@@ -105,7 +102,11 @@ int main() {
             DrawMultilineText(world_list, (Vector2){534, 400}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
 
             if (clicked) {
-                load_world(&data_world, world_name);
+                if(load_world(&data_world, world_name)) {create_world_files(world_name);}
+                if (load_config(&data_player, world_name)) {create_config(&data_player, world_name);}
+                init_player(&data_player, &camera);
+                init_player(&data_player, &test_camera);
+
                 unload_unnecessary(&textures);
             }
 
@@ -150,7 +151,7 @@ int main() {
     save_world(&data_world, world_name);
 
     take_player_info(&data_player, &camera);
-    save_config(&data_player);
+    save_config(&data_player, world_name);
 
     for (int i = 0; i < TOTAL_CHUNKS; i++) {
         for (int j = 0; j < TOTAL_CHUNKS; j++) {

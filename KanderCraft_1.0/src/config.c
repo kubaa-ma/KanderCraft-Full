@@ -13,7 +13,7 @@
 #include "../include/config.h"
 
 
-int create_config(Player_config *data){
+int create_config(Player_config *data, char *WorldName){
     FILE *config;
 
     data->render_distance = RENDER_DISTANCE_STANDARD;
@@ -27,7 +27,10 @@ int create_config(Player_config *data){
 
    data->fovy = 54;
 
-    config = fopen("game_settings/config.txt", "w");
+   char path[256];
+   sprintf(path, "WorldFiles/%s/%s", WorldName, CONFIG_PATH);
+    printf("%s", path);
+    config = fopen(path, "w");
 
     if(config == NULL){
         printf("The file does not exist");
@@ -46,10 +49,12 @@ int create_config(Player_config *data){
     return 0;
 }
 
-int save_config(Player_config *data){
+int save_config(Player_config *data, char *WorldName){
     FILE *config;
     
-    config = fopen("game_settings/config.txt", "w");
+    char path[256];
+    sprintf(path, "WorldFiles/%s/%s", WorldName, CONFIG_PATH);
+    config = fopen(path, "w");
 
     if(config == NULL){
         printf("The file does not exist");
@@ -69,9 +74,11 @@ int save_config(Player_config *data){
     return 0;
 }
 
-int load_config(Player_config *data){
+int load_config(Player_config *data, char *WorldName){
     FILE *config;
-    config = fopen("game_settings/config.txt", "r");
+    char path[256];
+    sprintf(path, "WorldFiles/%s/%s", WorldName, CONFIG_PATH);
+    config = fopen(path, "r");
     
     if(config == NULL){
         return 1;

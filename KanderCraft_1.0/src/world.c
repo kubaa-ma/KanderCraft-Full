@@ -58,24 +58,35 @@ int create_world_files(const char *world_name) {
     snprintf(path_world, sizeof(path_world), "%s/%s", PATH_WORLD_FILES, world_name);
     if (_mkdir(path_world) != 0 && errno != EEXIST) {
         perror("Error creating world folder");
+        return 0;
     }
 
     char path_chunks[256];
     snprintf(path_chunks, sizeof(path_chunks), "%s/Chunks", path_world);
     if (_mkdir(path_chunks) != 0 && errno != EEXIST) {
         perror("Error creating 'Chunks' folder");
+        return 0;
+    }
+
+    char path_game_settings[256];
+    snprintf(path_game_settings, sizeof(path_game_settings), "%s/game_settings", path_world);
+    if (_mkdir(path_game_settings) != 0 && errno != EEXIST) {
+        perror("Error creating 'game_settings' folder");
+        return 0;
     }
 
     char path_icon[256];
     snprintf(path_icon, sizeof(path_icon), "%s/Icon", path_world);
     if (_mkdir(path_icon) != 0 && errno != EEXIST) {
         perror("Error creating 'Icon' folder");
+        return 0;
     }
 
     char dest_icon[256];
     snprintf(dest_icon, sizeof(dest_icon), "%s/Icon/Icon.png", path_world);
-    if (copy_file("assets/dirt.png", dest_icon) != 0) {
-        printf("Error copying file 'dirt.png' (incompleted)\n");
+    if (copy_file("assets/Icon.png", dest_icon) != 0) {
+        printf("Error copying file 'Icon.png' (incompleted)\n");
+        return 0;
     }
 
     return 1;
