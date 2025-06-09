@@ -48,6 +48,14 @@ typedef enum {
     BLOCK_DIRT,
     BLOCK_GRASS,
     BLOCK_STONE,
+    BLOCK_DIAMOND,
+    BLOCK_WOOD,
+    BLOCK_WOOL_BLUE,
+    BLOCK_WOOL_GREEN,
+    BLOCK_WOOL_ORANGE,
+    BLOCK_WOOL_PINK,
+    BLOCK_WOOL_RED,
+    BLOCK_WOOL_VIOLET
 }Blocktype;
 
 typedef struct {

@@ -22,7 +22,7 @@ void init_sounds(SoundsK *data){
     data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
     data->place_loose_block = LoadSound("assets/sounds/place_loose.wav");
     data->place_stone_block = LoadSound("assets/sounds/place_stone.wav");
-
+    data->menu_click = LoadSound("assets/sounds/menu_click.wav");
 
     data->music3 = LoadMusicStream("assets/sounds/calm3.wav");
     // Music track used: calm3.wav
@@ -36,6 +36,7 @@ void unload_sounds(SoundsK *data){
     UnloadSound(data->place_loose_block);
     UnloadMusicStream(data->music3);
     UnloadSound(data->place_stone_block);
+    UnloadSound(data->menu_click);
 }
 
 void init_textures(Textures_K *data) {
@@ -52,7 +53,16 @@ void init_textures(Textures_K *data) {
     data->MENU_backgroundK = LoadTexture("assets/Background.png");
     data->button = LoadTexture("assets/button.png");
     data->button_t = LoadTexture("assets/button_tinner.png");
-
+    data->diamond = LoadTexture("assets/diamond.png");
+    data->wood = LoadTexture("assets/wood.png");
+    data->slot_cursor = LoadTexture("assets/slot_cursor.png");
+    data->slots_array = LoadTexture("assets/slot_array.png");
+    data->wool_blue = LoadTexture("assets/wool_blue.png");
+    data->wool_green = LoadTexture("assets/wool_dark_green.png");
+    data->wool_orange = LoadTexture("assets/wool_orange.png");
+    data->wool_pink = LoadTexture("assets/wool_pink.png");
+    data->wool_red = LoadTexture("assets/wool_red.png");
+    data->wool_violet = LoadTexture("assets/wool_violet.png");
 
 }
 
@@ -64,6 +74,16 @@ void unload_textures(Textures_K *data) {
     UnloadTexture(data->MENU_backgroundK);
     UnloadTexture(data->button);
     UnloadTexture(data->button_t);
+    UnloadTexture(data->diamond);
+    UnloadTexture(data->wood);
+    UnloadTexture(data->slot_cursor);
+    UnloadTexture(data->slots_array);
+    UnloadTexture(data->wool_blue);
+    UnloadTexture(data->wool_green);
+    UnloadTexture(data->wool_orange);
+    UnloadTexture(data->wool_pink);
+    UnloadTexture(data->wool_red);
+    UnloadTexture(data->wool_violet);
     for(int i = 0; i < CUBE_SIDES; i ++){
         UnloadTexture(data->grass[i]);
     }
@@ -89,6 +109,46 @@ void init_models(Model models[TEXTURES_AMOUNT], Textures_K *texture_data) {
         Mesh stone_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
         models[i] = LoadModelFromMesh(stone_face);
         models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->cobblestone;
+        i++;
+
+        Mesh diamond_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(diamond_face);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->diamond;
+        i++;
+
+        Mesh wood_face = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wood_face);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wood;
+        i++;
+
+        Mesh wool_blue = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_blue);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_blue;
+        i++;
+
+        Mesh wool_green = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_green);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_green;
+        i++;
+
+        Mesh wool_orange = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_orange);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_orange;
+        i++;
+
+        Mesh wool_pink = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_pink);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_pink;
+        i++;
+
+        Mesh wool_red = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_red);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_red;
+        i++;
+
+        Mesh wool_violet = GenMeshPlane(10.0f, 10.0f, 1, 1);
+        models[i] = LoadModelFromMesh(wool_violet);
+        models[i].materials[0].maps[MATERIAL_MAP_DIFFUSE].texture = texture_data->wool_violet;
         i++;
     }
 }
@@ -208,6 +268,38 @@ void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotati
             break;
         case BLOCK_STONE:
             DrawModelEx(models[7], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_DIAMOND:
+            DrawModelEx(models[8], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOD:
+            DrawModelEx(models[9], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOL_BLUE:
+            DrawModelEx(models[10], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOL_GREEN:
+            DrawModelEx(models[11], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOL_ORANGE:
+            DrawModelEx(models[12], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+        
+        case BLOCK_WOOL_PINK:
+            DrawModelEx(models[13], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOL_RED:
+            DrawModelEx(models[14], position, rotationAxis, rotationAngle, blockScale, tint);
+        break;
+
+        case BLOCK_WOOL_VIOLET:
+            DrawModelEx(models[15], position, rotationAxis, rotationAngle, blockScale, tint);
         break;
 
         default:
@@ -357,6 +449,38 @@ void Game_input(Vector5 Collision_data, World *data_world, Camera camera, Sounds
                 PlaySound(sounds->place_stone_block);
                 data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_STONE;
                 data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 2){
+                PlaySound(sounds->place_stone_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_DIAMOND;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 3){
+                PlaySound(sounds->place_stone_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOD;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 4){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_BLUE;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 5){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_GREEN;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 6){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_ORANGE;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 7){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_PINK;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 8){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_RED;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
+            } else if(block_place == 9){
+                PlaySound(sounds->destroy_loose_block);
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].type = BLOCK_WOOL_VIOLET;
+                data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].features = 0b00000111;
             }
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.min = (Vector3){newX + c_distance_z, newY, newZ + c_distance_x};
             data_world->data_chunks[Collision_data.cx][Collision_data.cz].data_blocks[newY][newX][newZ].box.max = (Vector3){newX + 1.0f + c_distance_z, newY + 1.0f, newZ + 1.0f + c_distance_x};
@@ -493,7 +617,7 @@ void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float 
 }
 
 
-int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]) {
+int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[], Sound click) {
     button->rect = (Rectangle){x, z, textures_struct.width, textures_struct.height};
     Vector2 mouse = GetMousePosition();
     button->covered = CheckCollisionPointRec(mouse, button->rect);
@@ -502,6 +626,7 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
     Color lightGray = (Color){200, 200, 200, 255};
 
     if (button->clicked) {
+        PlaySound(click);
         DrawTexture(textures_struct, x, z, DARKGRAY);
 
         if (*state == MENU) {
@@ -680,3 +805,18 @@ void DrawMultilineText(const char *text, Vector2 position, int fontSize, float s
     }
 }
 
+void draw_items(Textures_K *textures) {
+    int baseX = (GetScreenWidth() - textures->slots_array.width) / 2;
+    int baseY = GetScreenHeight() - textures->slots_array.height - 40;
+
+    DrawTexturePro(textures->dirt, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 0 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->cobblestone, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 1 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->diamond, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 2 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wood, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 3 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_blue, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 4 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_green, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 5 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_orange, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 6 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_pink, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 7 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_red, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 8 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+    DrawTexturePro(textures->wool_violet, (Rectangle){0, 0, 16, 16}, (Rectangle){baseX + 9 * 62 + 15, baseY + 15, 32, 32}, (Vector2){0, 0}, 0, WHITE);
+}

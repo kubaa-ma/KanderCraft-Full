@@ -35,6 +35,16 @@ typedef struct {
     Texture2D button;
     Texture2D button_t;
     Texture2D Icons[MAX_WORLDS];
+    Texture2D diamond;
+    Texture2D wood;
+    Texture2D slots_array;
+    Texture2D slot_cursor;
+    Texture2D wool_blue;
+    Texture2D wool_green;
+    Texture2D wool_orange;
+    Texture2D wool_pink;
+    Texture2D wool_red;
+    Texture2D wool_violet;
 } Textures_K;
 
 typedef struct{
@@ -42,6 +52,7 @@ typedef struct{
     Sound destroy_loose_block;
     Sound place_loose_block;
     Sound place_stone_block;
+    Sound menu_click;
 }SoundsK;
 
 
@@ -75,7 +86,7 @@ void draw_menu(Textures_K textures);
 
 void DrawMultilineText(const char *text, Vector2 position, int fontSize, float spacing, float lineSpacing, Color color, Font font);
 
-int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]);
+int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[], Sound click);
 
 void load_icon(char *world_list, Textures_K *textures);
 
@@ -85,10 +96,12 @@ void unload_unnecessary(Textures_K *textures);
 
 int name_input(char *world_name);
 
+void draw_items(Textures_K *textures);
 
 void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
 bool Vector3EqualsK(Vector3 a, Vector3 b);
 void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds, int block_place);
 void prepeare_block_ori(Block_orient *sour);
 void DrawFrustum(Camera3D cam, float nearDist, float farDist, float fovY, float aspect, World *data_world, bool *is_on);
+
 #endif

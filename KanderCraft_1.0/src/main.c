@@ -81,7 +81,7 @@ int main() {
             int x = (screenWidth - textures.button.width) / 2;
             int z = (screenHeight - textures.button.height) / 2;
             draw_menu(textures);
-            draw_buttons(&button_menu, textures.button, &state, x + 484, z + 400, 0, "NONE", "NONE");
+            draw_buttons(&button_menu, textures.button, &state, x + 484, z + 400, 0, "NONE", "NONE", data_sounds.menu_click);
             DrawTextPro(textures.standrat_font, "Play", (Vector2){884, 648}, (Vector2){0, 0}, 0, 42, 1.0f, WHITE);
             game_settings(&is_on, textures.standrat_font, &camera, Collision_data, &use_test_camera);
             EndDrawing();
@@ -94,7 +94,7 @@ int main() {
             draw_icons(textures);
             int clicked = 0;
             for(int i = 0; i < count; i++) {
-                if (draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list)) {
+                if (draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list, data_sounds.menu_click)) {
                     clicked = 1;
                 }
             }
@@ -103,7 +103,7 @@ int main() {
                 int x = GetScreenWidth() - textures.button.width;
                 int y = GetScreenHeight() - textures.button.height;
 
-                draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 999, world_name, world_list);
+                draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 999, world_name, world_list, data_sounds.menu_click);
                 DrawMultilineText("Create New World!", (Vector2){x - 60, y - 18}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
 
             }
@@ -132,7 +132,7 @@ int main() {
                 int clicked = 0;
                 int x = GetScreenWidth() - textures.button.width;
                 int y = GetScreenHeight() - textures.button.height;
-                if(draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 1000, world_name, world_list) == 1000){
+                if(draw_buttons(&button_menu, textures.button, &state, x -100, y - 48, 1000, world_name, world_list, data_sounds.menu_click) == 1000){
                     clicked = 1000;
                 }
                 DrawMultilineText("Create!", (Vector2){x - 60, y - 18}, 42, 1.0f, 46.0f, WHITE, textures.standrat_font);
@@ -151,6 +151,7 @@ int main() {
 
 
         } else if(state == GAME){
+
             if (IsKeyPressed(KEY_U)) {use_test_camera = !use_test_camera;}
             
             Centering_cursor();
@@ -173,16 +174,17 @@ int main() {
             if(IsKeyUp(KEY_L)) DrawTexture(textures.cursor, screenWidth, screenHeight, WHITE);
 
 
+            DrawTexture(textures.slots_array, (GetScreenWidth() - textures.slots_array.width) / 2, GetScreenHeight() - textures.slots_array.height - 40, WHITE);
+            DrawTexture(textures.slot_cursor, (GetScreenWidth() - textures.slots_array.width) / 2 + (block_place * 61) + block_place, GetScreenHeight() - textures.slots_array.height - 40, WHITE);
+            draw_items(&textures);
             EndDrawing();
 
             Game_input(Collision_data, &data_world, camera, &data_sounds, block_place);
             settle_blocks(&data_world);
-            if(GetMouseWheelMove()){
-                if(block_place == 0){
-                    block_place = 1;
-                } else if (block_place == 1){
-                    block_place = 0;
-                }
+
+            int key = GetCharPressed();
+            if (key >= '0' && key <= '9') {
+                block_place = key - '0'; 
             }
         }
     }
