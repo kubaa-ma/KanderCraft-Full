@@ -16,6 +16,7 @@
 #include "../include/block.h"
 #include "raymath.h"
 #include <string.h>
+#include <stdio.h>
 
 void init_sounds(SoundsK *data){
     data->destroy_loose_block = LoadSound("assets/sounds/destroy_loose.wav");
@@ -296,6 +297,7 @@ Vector5 detectCollision(Camera camera, World *data_world, bool use_test_camera) 
     return datas;
 }
 
+
 void Game_input(Vector5 Collision_data, World *data_world, Camera camera, SoundsK *sounds, int block_place) {
     int c_distance_x = 0;
     int c_distance_z = 0;
@@ -543,6 +545,53 @@ int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, in
 
     return 0;
 }
+
+void load_icon(char *world_list, Textures_K *textures) {
+    char buffer[256];
+    char *start = world_list;
+    char *newline;
+
+    int row = 0;
+
+    while ((newline = strchr(start, '\n')) != NULL && row < MAX_WORLDS) {
+        int len = newline - start;
+        strncpy(buffer, start, len);
+        buffer[len] = '\0';
+
+        char path[256];
+        sprintf(path, "WorldFiles/%s/Icon/Icon.png", buffer);
+
+        if (FileExists(path)) {
+            textures->Icons[row] = LoadTexture(path);
+        } else {
+            textures->Icons[row] = LoadTexture("WorldFiles/default/Icon.png");
+        }
+
+        start = newline + 1;
+        row++;
+    }
+
+    for (int i = row; i < MAX_WORLDS; i++) {
+        textures->Icons[i].id = 0;
+    }
+}
+
+void draw_icons(Textures_K textures){
+    for (int i = 0; i < MAX_WORLDS; i++) {
+        if(textures.Icons->id != 0) DrawTexture(textures.Icons[i], 400, 400 + i * 82, WHITE);
+    }
+}
+
+void unload_unnecessary(Textures_K *textures) {
+    UnloadTexture(textures->MENU_backgroundK);
+    for (int i = 0; i < MAX_WORLDS; i++) {
+        if (textures->Icons[i].id != 0) {
+            UnloadTexture(textures->Icons[i]);
+            textures->Icons[i].id = 0;
+        }
+    }
+}
+
 
 
 

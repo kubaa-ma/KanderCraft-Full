@@ -38,9 +38,6 @@ int main() {
             world_generator(&data_world);
         }
     }
-    
-
-
 
     int block_place = 0;
     bool is_on = false;
@@ -74,7 +71,8 @@ int main() {
     Camera test_camera = { 0 };
     create_camera(&test_camera, &screenCenter, &cameralast);
     init_player(&data_player, &test_camera);
-
+    int count = load_folder_names(world_list, sizeof(world_list)); 
+    load_icon(world_list, &textures);
 
 
     while (!WindowShouldClose()) {
@@ -92,12 +90,11 @@ int main() {
             EndDrawing();
 
         }else if(state == WORLDS) {
-            int count = load_folder_names(world_list, sizeof(world_list)); 
 
             BeginDrawing();
             ClearBackground(WHITE);
             draw_menu(textures);
-
+            draw_icons(textures);
             int clicked = 0;
             for(int i = 0; i < count; i++) {
                 if (draw_buttons(&button_wlist, textures.button_t, &state, 484, 400 + (i * 82), i, world_name, world_list)) {
@@ -109,6 +106,7 @@ int main() {
 
             if (clicked) {
                 load_world(&data_world, world_name);
+                unload_unnecessary(&textures);
             }
 
             EndDrawing();

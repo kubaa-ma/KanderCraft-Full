@@ -22,6 +22,7 @@
 #include "block.h"
 
 #define PATH_WORLD_FILES "WorldFiles"
+#define MAX_WORLDS 50
 
 typedef struct{
     Block ***data_blocks;

@@ -32,6 +32,7 @@ typedef struct {
     Texture2D MENU_backgroundK;
     Texture2D button;
     Texture2D button_t;
+    Texture2D Icons[MAX_WORLDS];
 } Textures_K;
 
 typedef struct{
@@ -73,6 +74,12 @@ void draw_menu(Textures_K textures);
 void DrawMultilineText(const char *text, Vector2 position, int fontSize, float spacing, float lineSpacing, Color color, Font font);
 
 int draw_buttons(Button *button, Texture2D textures_struct, GAMESTATE *state, int x, int z, int i, char world_name[], char world_list[]);
+
+void load_icon(char *world_list, Textures_K *textures);
+
+void draw_icons(Textures_K textures);
+
+void unload_unnecessary(Textures_K *textures);
 
 void draw_IT(Model *models, Vector3 position, Vector3 rotationAxis, float rotationAngle, Vector3 blockScale, Color tint, Blocktype type);
 bool Vector3EqualsK(Vector3 a, Vector3 b);
